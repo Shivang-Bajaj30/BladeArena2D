@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://dehp7fpsbx0j6"]
+
+[ext_resource type="Script" uid="uid://df0sobmxbq4h1" path="res://Player.gd" id="1_onrkg"]
+[ext_resource type="SpriteFrames" uid="uid://gwd2a5wh0jnw" path="res://fig_1.tres" id="2_onrkg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a7ogs"]
+size = Vector2(50, 80)
+
+[node name="Player" type="CharacterBody2D" unique_id=214181562]
+script = ExtResource("1_onrkg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=125872186]
+shape = SubResource("RectangleShape2D_a7ogs")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=303662313]
+position = Vector2(383, 132)
+scale = Vector2(0.957, 1)
+sprite_frames = ExtResource("2_onrkg")
+animation = &"idle_sword"
+offset = Vector2(-400, -300)

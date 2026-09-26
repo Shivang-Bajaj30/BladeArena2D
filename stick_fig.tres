@@ -1,0 +1,288 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://24jegb3c845d"]
+
+[ext_resource type="Texture2D" uid="uid://d2xu2frscps3q" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0001.png" id="1_0l8bc"]
+[ext_resource type="Texture2D" uid="uid://ct1rxuguvbfq5" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0064.png" id="1_cx1rj"]
+[ext_resource type="Texture2D" uid="uid://e1wiydsdmaj8" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0009.png" id="1_hd27q"]
+[ext_resource type="Texture2D" uid="uid://d08vgu3ucixjb" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0065.png" id="2_6quex"]
+[ext_resource type="Texture2D" uid="uid://dhaw4sr0b8laf" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0002.png" id="2_trnis"]
+[ext_resource type="Texture2D" uid="uid://bfnppwc3aevys" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0010.png" id="2_xui7m"]
+[ext_resource type="Texture2D" uid="uid://b1s7tbe7dhl2t" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0066.png" id="3_0tiai"]
+[ext_resource type="Texture2D" uid="uid://gl62be78rvhl" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0011.png" id="3_aghwj"]
+[ext_resource type="Texture2D" uid="uid://ch0o7xhvqpdq8" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0003.png" id="3_qig0n"]
+[ext_resource type="Texture2D" uid="uid://t8lng7t8lpb8" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0067.png" id="4_1rxjf"]
+[ext_resource type="Texture2D" uid="uid://c8vdc67mywrjm" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0012.png" id="4_27swc"]
+[ext_resource type="Texture2D" uid="uid://ybluh6jw6ylx" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0004.png" id="4_jlkm1"]
+[ext_resource type="Texture2D" uid="uid://o230kgx5x3ii" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0013.png" id="5_bxtxl"]
+[ext_resource type="Texture2D" uid="uid://dufi6cilhbgwt" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0005.png" id="5_do0ys"]
+[ext_resource type="Texture2D" uid="uid://bek75ubn1uohh" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0068.png" id="5_pvjoe"]
+[ext_resource type="Texture2D" uid="uid://cut5hasyneur2" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0014.png" id="6_gn6bf"]
+[ext_resource type="Texture2D" uid="uid://dk0y434b12icw" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0069.png" id="6_q7xpo"]
+[ext_resource type="Texture2D" uid="uid://pjmrv26oj8ap" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0006.png" id="6_qg56j"]
+[ext_resource type="Texture2D" uid="uid://dcyv1p7885cit" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0015.png" id="7_8ng27"]
+[ext_resource type="Texture2D" uid="uid://88ih2skw3wdn" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0070.png" id="7_ac2dv"]
+[ext_resource type="Texture2D" uid="uid://rs1utmooafky" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0007.png" id="7_mg3pa"]
+[ext_resource type="Texture2D" uid="uid://840dc5cqrgf2" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_Idle_0008.png" id="8_g3boa"]
+[ext_resource type="Texture2D" uid="uid://dqq40pi8vssc7" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_walk_0016.png" id="8_hkv3v"]
+[ext_resource type="Texture2D" uid="uid://bkbv60vma8iwy" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0071.png" id="8_oj4xg"]
+[ext_resource type="Texture2D" uid="uid://b0m6nvpgh78vt" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0017.png" id="9_2ou1w"]
+[ext_resource type="Texture2D" uid="uid://c3wq1xa3yuvdq" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_jump_0043.png" id="9_ddsuv"]
+[ext_resource type="Texture2D" uid="uid://pmlus15lnpo4" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0072.png" id="9_jj1hj"]
+[ext_resource type="Texture2D" uid="uid://l1fdbdu8sfhi" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0073.png" id="10_4haqt"]
+[ext_resource type="Texture2D" uid="uid://dvrrqnc1e0x7r" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_jump_0044.png" id="10_crtt8"]
+[ext_resource type="Texture2D" uid="uid://b6g8p61wix2ab" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0018.png" id="10_jiwhn"]
+[ext_resource type="Texture2D" uid="uid://bsexf7siwlcib" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0074.png" id="11_gsf5q"]
+[ext_resource type="Texture2D" uid="uid://b28q1j5q2vhr6" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_jump_0045.png" id="11_k45du"]
+[ext_resource type="Texture2D" uid="uid://dcn1gvjhxgcxn" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0019.png" id="11_pe8lw"]
+[ext_resource type="Texture2D" uid="uid://c8i20vfoo5lne" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0075.png" id="12_3t0pe"]
+[ext_resource type="Texture2D" uid="uid://df2eudvb8ku5x" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_jump_0046.png" id="12_trmu6"]
+[ext_resource type="Texture2D" uid="uid://dbtnixqwswyl5" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0020.png" id="12_wip4b"]
+[ext_resource type="Texture2D" uid="uid://3pdk2l855vub" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0021.png" id="13_6582q"]
+[ext_resource type="Texture2D" uid="uid://b5h06wgfougdl" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0076.png" id="13_mv58b"]
+[ext_resource type="Texture2D" uid="uid://cf44lyke8wb41" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_jump_0047.png" id="13_qfcna"]
+[ext_resource type="Texture2D" uid="uid://cphwpjrhf7suh" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0022.png" id="14_ddsuv"]
+[ext_resource type="Texture2D" uid="uid://db1bxlp0aghoq" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0077.png" id="14_ryyks"]
+[ext_resource type="Texture2D" uid="uid://dmhy1jsp4ulbk" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0023.png" id="15_crtt8"]
+[ext_resource type="Texture2D" uid="uid://38j3sb1n6v3r" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0078.png" id="15_yevbb"]
+[ext_resource type="Texture2D" uid="uid://bgsul5fmnu1xr" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_run_0024.png" id="16_k45du"]
+[ext_resource type="Texture2D" uid="uid://gaupd1tjhy6" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0079.png" id="16_o5cue"]
+[ext_resource type="Texture2D" uid="uid://caka28vn1lsas" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0080.png" id="17_x3wrp"]
+[ext_resource type="Texture2D" uid="uid://c1juh7804x82s" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0081.png" id="18_icyls"]
+[ext_resource type="Texture2D" uid="uid://kv633jxdwl4b" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_combo_0082.png" id="19_32k1n"]
+[ext_resource type="Texture2D" uid="uid://p2eo3pnnla8b" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_dash_0033.png" id="20_ac2dv"]
+[ext_resource type="Texture2D" uid="uid://dj3a6e3bb5crn" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_dash_0034.png" id="21_oj4xg"]
+[ext_resource type="Texture2D" uid="uid://ccafex80tvqun" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0025.png" id="22_82qbv"]
+[ext_resource type="Texture2D" uid="uid://df7s34rmjuxgn" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_dash_0035.png" id="22_jj1hj"]
+[ext_resource type="Texture2D" uid="uid://cwsppjeb8hx8i" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0026.png" id="23_2g33r"]
+[ext_resource type="Texture2D" uid="uid://ggw0rfjgtyht" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_dash_0036.png" id="23_4haqt"]
+[ext_resource type="Texture2D" uid="uid://d3gdptwiorims" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0027.png" id="24_e6sx8"]
+[ext_resource type="Texture2D" uid="uid://cxfhuhsufj2we" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_dash_0037.png" id="24_gsf5q"]
+[ext_resource type="Texture2D" uid="uid://be4gboyjudd46" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_dash_0038.png" id="25_3t0pe"]
+[ext_resource type="Texture2D" uid="uid://cwph0sporo2q2" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0028.png" id="25_dut4b"]
+[ext_resource type="Texture2D" uid="uid://py3t710yktmo" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0029.png" id="26_hamyh"]
+[ext_resource type="Texture2D" uid="uid://cjhcdcew5p5l2" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0030.png" id="27_t3jql"]
+[ext_resource type="Texture2D" uid="uid://cux3lj7086igh" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0031.png" id="28_5oyl4"]
+[ext_resource type="Texture2D" uid="uid://nr32887o6go" path="res://Stick Figure Character Sprites 2D/Fighter sprites/fighter_slide_0032.png" id="29_tqk6t"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_cx1rj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_6quex")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_0tiai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_1rxjf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_pvjoe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_q7xpo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ac2dv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_oj4xg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_jj1hj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_4haqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_gsf5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_3t0pe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_mv58b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ryyks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_yevbb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_o5cue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_x3wrp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_icyls")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_32k1n")
+}],
+"loop": 0,
+"name": &"attack_combo",
+"speed": 18.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_ac2dv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_oj4xg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_jj1hj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_4haqt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_gsf5q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_3t0pe")
+}],
+"loop": 0,
+"name": &"dash",
+"speed": 18.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0l8bc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_trnis")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_qig0n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_jlkm1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_do0ys")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_qg56j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_mg3pa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_g3boa")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_ddsuv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_crtt8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_k45du")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_trmu6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_qfcna")
+}],
+"loop": 0,
+"name": &"jump",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_2ou1w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_jiwhn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_pe8lw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_wip4b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_6582q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ddsuv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_crtt8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_k45du")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_82qbv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_2g33r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_e6sx8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_dut4b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_hamyh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_t3jql")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_5oyl4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_tqk6t")
+}],
+"loop": 0,
+"name": &"slide",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_hd27q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_xui7m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_aghwj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_27swc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_bxtxl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_gn6bf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_8ng27")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_hkv3v")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
