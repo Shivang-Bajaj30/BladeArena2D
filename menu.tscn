@@ -1,33 +1,132 @@
-[gd_scene load_steps=5 format=3 uid="uid://c7m5y1v9p4k2j"]
+[gd_scene load_steps=17 format=3 uid="uid://c7m5y1v9p4k2j"]
 
 [ext_resource type="Script" path="res://Menu.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://background/cyberpunk_city.jpg" id="2_bg"]
+[ext_resource type="Texture2D" path="res://menu_vignette.png" id="3_vignette"]
+[ext_resource type="Texture2D" path="res://Stick Figure Character Sprites 2D/Sword sprites/sword_Idle_0001.png" id="4_hero"]
+[ext_resource type="Texture2D" path="res://menu_glow.png" id="5_glow"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
-bg_color = Color(0.2, 0.2, 0.2, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.06, 0.09, 0.16, 0.92)
+border_width_left = 3
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.18, 0.52, 0.82, 0.85)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0, 0, 0.45)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.12, 0.22, 0.38, 0.98)
+border_width_left = 5
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.0, 0.88, 1, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+shadow_color = Color(0, 0.8, 1, 0.35)
+shadow_size = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.04, 0.14, 0.26, 1)
+border_width_left = 5
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 2
+border_color = Color(0.0, 1, 0.9, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_glass"]
+bg_color = Color(0.04, 0.06, 0.1, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.18, 0.35, 0.55, 0.65)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_cyber"]
+bg_color = Color(0.05, 0.08, 0.14, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.0, 0.8, 1, 0.85)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(0, 0.6, 1, 0.3)
+shadow_size = 18
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_bg"]
+bg_color = Color(0.08, 0.12, 0.18, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_fill"]
+bg_color = Color(0.0, 0.85, 1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm_normal"]
+bg_color = Color(0.0, 0.6, 0.8, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.9, 1, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-expand_margin_left = 10.0
-expand_margin_right = 10.0
+shadow_color = Color(0, 0.8, 1, 0.4)
+shadow_size = 10
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
-bg_color = Color(0.28, 0.28, 0.28, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm_hover"]
+bg_color = Color(0.1, 0.75, 1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 1, 1, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-expand_margin_left = 10.0
-expand_margin_right = 10.0
+shadow_color = Color(0, 0.9, 1, 0.7)
+shadow_size = 16
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
-bg_color = Color(0.15, 0.15, 0.15, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm_disabled"]
+bg_color = Color(0.15, 0.22, 0.3, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3, 0.4, 0.5, 0.5)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
-expand_margin_left = 10.0
-expand_margin_right = 10.0
 
 [node name="Menu" type="Control"]
 layout_mode = 3
@@ -38,118 +137,819 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BackgroundLayer" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.12, 0.12, 0.12, 1)
+mouse_filter = 2
 
-[node name="Label" type="Label" parent="."]
+[node name="BgTexture" type="TextureRect" parent="BackgroundLayer"]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -200.0
-offset_top = 80.0
-offset_right = 200.0
-offset_bottom = 145.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -25.0
+offset_right = 40.0
+offset_bottom = 25.0
 grow_horizontal = 2
-theme_override_font_sizes/font_size = 56
-text = "Blade Arena 2D"
-horizontal_alignment = 1
+grow_vertical = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="AtmosphericOverlay" type="ColorRect" parent="BackgroundLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.08, 0.2, 0.4, 0.25)
+
+[node name="DarkVignette" type="ColorRect" parent="BackgroundLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.03, 0.06, 0.35)
+
+[node name="Vignette" type="TextureRect" parent="BackgroundLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_vignette")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ParticleContainer" type="Control" parent="BackgroundLayer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HeroStage" type="Control" parent="BackgroundLayer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -140.0
-offset_top = -160.0
-offset_right = 140.0
-offset_bottom = 260.0
+offset_left = 380.0
+offset_top = 0.0
+offset_right = 380.0
+offset_bottom = 0.0
 grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HeroGlow" type="Sprite2D" parent="BackgroundLayer/HeroStage"]
+modulate = Color(0, 0.85, 1, 0.45)
+scale = Vector2(5.5, 5.5)
+texture = ExtResource("5_glow")
+
+[node name="HeroSprite" type="Sprite2D" parent="BackgroundLayer/HeroStage"]
+scale = Vector2(2.8, 2.8)
+texture = ExtResource("4_hero")
+
+[node name="Header" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 60.0
+offset_top = 35.0
+offset_right = -60.0
+offset_bottom = 100.0
+grow_horizontal = 2
+
+[node name="LogoBadge" type="HBoxContainer" parent="Header"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 320.0
+offset_bottom = 25.0
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="GlowDot" type="ColorRect" parent="Header/LogoBadge"]
+custom_minimum_size = Vector2(10, 36)
+layout_mode = 2
+color = Color(0, 0.88, 1, 1)
+
+[node name="VBox" type="VBoxContainer" parent="Header/LogoBadge"]
+layout_mode = 2
+theme_override_constants/separation = -2
+
+[node name="SubTitle" type="Label" parent="Header/LogoBadge/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 12
+text = "CYBERNETIC SHADOW COMBAT"
+
+[node name="MainTitle" type="Label" parent="Header/LogoBadge/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0.8, 1, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 28
+text = "BLADE ARENA 2D"
+
+[node name="RightControls" type="HBoxContainer" parent="Header"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -22.0
+offset_bottom = 22.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="QuickMusicToggle" type="Button" parent="Header/RightControls"]
+custom_minimum_size = Vector2(160, 42)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 16
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "🔊 BGM: ON"
+
+[node name="Views" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HomeView" type="Control" parent="Views"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HeroTitleBox" type="VBoxContainer" parent="Views/HomeView"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 120.0
+offset_top = -260.0
+offset_right = 650.0
+offset_bottom = -140.0
+grow_vertical = 2
+theme_override_constants/separation = 4
+
+[node name="Tagline" type="Label" parent="Views/HomeView/HeroTitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "⚔ NEXT-GEN CINEMATIC DUEL"
+
+[node name="Title" type="Label" parent="Views/HomeView/HeroTitleBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
+theme_override_constants/shadow_offset_y = 4
+theme_override_font_sizes/font_size = 54
+text = "ENTER THE ARENA"
+
+[node name="MenuContainer" type="VBoxContainer" parent="Views/HomeView"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 120.0
+offset_top = -100.0
+offset_right = 520.0
+offset_bottom = 340.0
 grow_vertical = 2
 theme_override_constants/separation = 16
 
-[node name="HomeButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="PlayBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(380, 68)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "🏠 Home"
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "▶  PLAY COMBAT"
+alignment = 0
 
-[node name="PlayButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="CharacterBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(380, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "▶️ Start / Play"
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "👤  SELECT CHARACTER"
+alignment = 0
 
-[node name="SettingsButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="BackgroundBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(380, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "⚙️ Settings"
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "🎨  CHANGE BACKGROUND"
+alignment = 0
 
-[node name="BgButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="SettingsBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(380, 60)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "🎨 Change Background"
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "⚙  SETTINGS"
+alignment = 0
 
-[node name="SoundButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="ExitBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(380, 52)
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "🔊 Sound On/Off"
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "✕  EXIT GAME"
+alignment = 0
 
-[node name="AboutButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="CharacterSelectView" type="Control" parent="Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBtn" type="Button" parent="Views/CharacterSelectView"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 0
+offset_left = 60.0
+offset_top = 115.0
+offset_right = 220.0
+offset_bottom = 163.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "◀ BACK"
+
+[node name="HeaderLabel" type="Label" parent="Views/CharacterSelectView"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 118.0
+offset_right = 650.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "CHOOSE YOUR WARRIOR"
+
+[node name="CenterArea" type="Control" parent="Views/CharacterSelectView"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -320.0
+offset_right = 640.0
+offset_bottom = 360.0
+grow_vertical = 2
+
+[node name="CharacterCards" type="HBoxContainer" parent="Views/CharacterSelectView/CenterArea"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -220.0
+offset_right = 280.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="PreviewBox" type="Panel" parent="Views/CharacterSelectView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -300.0
+offset_right = 230.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
+
+[node name="BigPortrait" type="TextureRect" parent="Views/CharacterSelectView/PreviewBox"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DetailsPanel" type="Panel" parent="Views/CharacterSelectView"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -660.0
+offset_top = -300.0
+offset_right = -60.0
+offset_bottom = 360.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_cyber")
+
+[node name="VBox" type="VBoxContainer" parent="Views/CharacterSelectView/DetailsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 36.0
+offset_top = 36.0
+offset_right = -36.0
+offset_bottom = -36.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="CharRole" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "ℹ️ About"
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "SWORD VANGUARD"
 
-[node name="QuitButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(280, 50)
+[node name="CharName" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 22
-theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")
-theme_override_styles/focus = SubResource("StyleBoxFlat_normal")
-text = "❌ Exit"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "KAGE • BLADE MASTER"
 
-[connection signal="pressed" from="VBoxContainer/HomeButton" to="." method="_on_home_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/BgButton" to="." method="_on_bg_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/SoundButton" to="." method="_on_sound_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/AboutButton" to="." method="_on_about_button_pressed"]
-[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[node name="CharWeapon" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 16
+text = "WEAPON: Dual Katana & Murasame"
+
+[node name="CharDesc" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+custom_minimum_size = Vector2(0, 70)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 15
+text = "Lethal blade warrior executing lightning-fast iaido slashes and devastating aerial descent strikes."
+autowrap_mode = 3
+
+[node name="Divider" type="ColorRect" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.18, 0.3, 0.45, 0.6)
+
+[node name="StatsTitle" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "COMBAT ATTRIBUTES"
+
+[node name="StatsGrid" type="VBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="DmgRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/DmgRow"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "DAMAGE"
+
+[node name="DamageBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
+value = 92.0
+show_percentage = false
+
+[node name="SpdRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/SpdRow"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "SPEED"
+
+[node name="SpeedBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
+value = 85.0
+show_percentage = false
+
+[node name="RngRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/RngRow"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "RANGE"
+
+[node name="RangeBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
+value = 78.0
+show_percentage = false
+
+[node name="DefRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/DefRow"]
+custom_minimum_size = Vector2(90, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "DEFENSE"
+
+[node name="DefenseBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
+value = 74.0
+show_percentage = false
+
+[node name="Spacer" type="Control" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ConfirmCharBtn" type="Button" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_confirm_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_confirm_disabled")
+text = "SELECT WARRIOR"
+
+[node name="BackgroundSelectView" type="Control" parent="Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBtn" type="Button" parent="Views/BackgroundSelectView"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 0
+offset_left = 60.0
+offset_top = 115.0
+offset_right = 220.0
+offset_bottom = 163.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "◀ BACK"
+
+[node name="HeaderLabel" type="Label" parent="Views/BackgroundSelectView"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 118.0
+offset_right = 650.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "CHOOSE ENVIRONMENT"
+
+[node name="Content" type="HBoxContainer" parent="Views/BackgroundSelectView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 190.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="Grid" type="GridContainer" parent="Views/BackgroundSelectView/Content"]
+custom_minimum_size = Vector2(760, 0)
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+
+[node name="PreviewPanel" type="Panel" parent="Views/BackgroundSelectView/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_cyber")
+
+[node name="BigPreview" type="TextureRect" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 440.0
+grow_horizontal = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BgTag" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 460.0
+offset_right = -28.0
+offset_bottom = 485.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 14
+text = "CYBERPUNK NEON"
+
+[node name="BgName" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 488.0
+offset_right = -28.0
+offset_bottom = 528.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "NEO-TOKYO 2099"
+
+[node name="BgDesc" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 536.0
+offset_right = -28.0
+offset_bottom = 610.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.7, 0.76, 0.85, 1)
+theme_override_font_sizes/font_size = 15
+text = "Rain-slicked skyscrapers drenched in vibrant cyan and magenta holographic glow."
+autowrap_mode = 3
+
+[node name="ConfirmBgBtn" type="Button" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -80.0
+offset_right = -28.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_confirm_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_confirm_disabled")
+text = "EQUIP ENVIRONMENT"
+
+[node name="SettingsView" type="Control" parent="Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBtn" type="Button" parent="Views/SettingsView"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 0
+offset_left = 60.0
+offset_top = 115.0
+offset_right = 220.0
+offset_bottom = 163.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "◀ BACK"
+
+[node name="HeaderLabel" type="Label" parent="Views/SettingsView"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 118.0
+offset_right = 650.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "SYSTEM SETTINGS"
+
+[node name="Panel" type="Panel" parent="Views/SettingsView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -260.0
+offset_right = 400.0
+offset_bottom = 320.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
+
+[node name="VBox" type="VBoxContainer" parent="Views/SettingsView/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = 35.0
+offset_right = -40.0
+offset_bottom = -35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+
+[node name="AudioHeader" type="Label" parent="Views/SettingsView/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "AUDIO CONFIGURATION"
+
+[node name="AudioSection" type="VBoxContainer" parent="Views/SettingsView/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicRow" type="HBoxContainer" parent="Views/SettingsView/Panel/VBox/AudioSection"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Background Music"
+
+[node name="MusicSlider" type="HSlider" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+size_flags_vertical = 4
+value = 85.0
+
+[node name="MusicValue" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "85%"
+
+[node name="MusicToggle" type="Button" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
+custom_minimum_size = Vector2(80, 36)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "ON"
+
+[node name="SfxRow" type="HBoxContainer" parent="Views/SettingsView/Panel/VBox/AudioSection"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Sound Effects (SFX)"
+
+[node name="SfxSlider" type="HSlider" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
+custom_minimum_size = Vector2(300, 24)
+layout_mode = 2
+size_flags_vertical = 4
+value = 90.0
+
+[node name="SfxValue" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "90%"
+
+[node name="SfxToggle" type="Button" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
+custom_minimum_size = Vector2(80, 36)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "ON"
+
+[node name="Divider" type="ColorRect" parent="Views/SettingsView/Panel/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.18, 0.3, 0.45, 0.6)
+
+[node name="GraphicsHeader" type="Label" parent="Views/SettingsView/Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "GRAPHICS & CINEMATIC EFFECTS"
+
+[node name="GraphicsSection" type="VBoxContainer" parent="Views/SettingsView/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="BloomCheck" type="CheckBox" parent="Views/SettingsView/Panel/VBox/GraphicsSection"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+button_pressed = true
+text = "Atmospheric Bloom & Rim Lighting"
+
+[node name="ParticlesCheck" type="CheckBox" parent="Views/SettingsView/Panel/VBox/GraphicsSection"]
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+button_pressed = true
+text = "Cinematic Ambient Embers & Particle Fog"
+
+[node name="IntroOverlay" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.02, 0.04, 1)
+
+[connection signal="pressed" from="Views/HomeView/MenuContainer/PlayBtn" to="." method="_on_play_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/MenuContainer/CharacterBtn" to="." method="_on_character_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/MenuContainer/BackgroundBtn" to="." method="_on_background_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/MenuContainer/SettingsBtn" to="." method="_on_settings_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/MenuContainer/ExitBtn" to="." method="_on_exit_btn_pressed"]
+[connection signal="pressed" from="Views/CharacterSelectView/BackBtn" to="." method="_on_back_to_home_pressed"]
+[connection signal="pressed" from="Views/CharacterSelectView/DetailsPanel/VBox/ConfirmCharBtn" to="." method="_on_confirm_char_pressed"]
+[connection signal="pressed" from="Views/BackgroundSelectView/BackBtn" to="." method="_on_back_to_home_pressed"]
+[connection signal="pressed" from="Views/BackgroundSelectView/Content/PreviewPanel/ConfirmBgBtn" to="." method="_on_confirm_bg_pressed"]
+[connection signal="pressed" from="Views/SettingsView/BackBtn" to="." method="_on_back_to_home_pressed"]

@@ -25,6 +25,13 @@ extends Node2D
 
 func _ready():
 	print("=== Background script starting ===")
+	if GameState:
+		var bg_data = GameState.get_background_data(GameState.selected_background)
+		if bg_data:
+			if "ember_color" in bg_data:
+				ember_color = bg_data["ember_color"]
+			if "fog_color" in bg_data:
+				fog_color = bg_data["fog_color"]
 	create_base_background()
 	create_fog_layers()
 	create_embers()
@@ -43,6 +50,18 @@ func create_base_background():
 	bg.position = Vector2(-2000, -1500)
 	bg.z_index = -100
 	add_child(bg)
+	
+	if GameState:
+		var bg_data = GameState.get_background_data(GameState.selected_background)
+		if bg_data and ResourceLoader.exists(bg_data["texture_path"]):
+			var sprite := Sprite2D.new()
+			sprite.texture = load(bg_data["texture_path"])
+			sprite.position = Vector2(0, 0)
+			# Scale to comfortably cover arena bounds
+			sprite.scale = Vector2(2.4, 2.4)
+			sprite.modulate = Color(1.0, 1.0, 1.0, 0.85)
+			sprite.z_index = -90
+			add_child(sprite)
 
 # ------------------------------------------------------------
 # 2. Fog layers

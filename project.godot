@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="BladeArena"
-run/main_scene="uid://b7y7s6j4s0x6"
+run/main_scene="res://menu.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
-InputManager="*uid://b5symtpf2micj"
+GameState="*res://GameState.gd"
+AudioManager="*res://AudioManager.gd"
+InputManager="*res://InputManager.gd"
 
 [display]
 

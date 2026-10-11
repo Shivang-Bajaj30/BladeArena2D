@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://cu351afhowkww" path="res://CameraFollow.gd" id="5_camera_follow"]
 [ext_resource type="Texture2D" uid="uid://bdnebpbm4g85m" path="res://Stick Figure Character Sprites 2D/Extras/sidewall.png" id="6_sidewall"]
 [ext_resource type="Texture2D" uid="uid://c0gfm6cf6ha5u" path="res://Stick Figure Character Sprites 2D/Extras/rocks.png" id="7_rocks"]
+[ext_resource type="Script" path="res://MainGame.gd" id="8_maingame"]
 
 [sub_resource type="Shader" id="Shader_environment_blend"]
 code = "shader_type canvas_item;
@@ -34,6 +35,7 @@ shader_parameter/opacity = 0.78
 size = Vector2(1000, 20)
 
 [node name="Main" type="Node2D" unique_id=2032223761]
+script = ExtResource("8_maingame")
 
 [node name="Background" parent="." unique_id=1927785208 instance=ExtResource("2_0xm2m")]
 scale = Vector2(1.5, 1.5)

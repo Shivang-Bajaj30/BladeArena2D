@@ -30,6 +30,9 @@ extends CharacterBody2D
 
 var is_attacking: bool = false
 var attack_timer: float = 0.0
+var combo_step: int = 0
+var combo_reset_timer: float = 0.0
+@export var combo_window: float = 0.6
 var is_dashing: bool = false
 var is_air_dashing: bool = false
 var is_sliding: bool = false
@@ -60,11 +63,50 @@ var dust_interval: float = 0.05
 var speedline_timer: float = 0.0
 var speedline_interval: float = 0.04
 
+var hitbox: Area2D
+var hitbox_shape: CollisionShape2D
+
 func _ready():
+	# Apply selected character from GameState
+	if GameState:
+		var char_data = GameState.get_character_data(GameState.selected_character)
+		if char_data and ResourceLoader.exists(char_data["frames_path"]):
+			anim.sprite_frames = load(char_data["frames_path"])
+	
 	base_anim_scale = anim.scale
 	base_anim_position = anim.position
 	floor_snap_length = 12.0
-	anim.play("idle_sword")
+	
+	if anim.sprite_frames.has_animation("idle_sword"):
+		anim.play("idle_sword")
+	elif anim.sprite_frames.has_animation("idle"):
+		anim.play("idle")
+	setup_hitbox()
+
+func setup_hitbox():
+	hitbox = Area2D.new()
+	hitbox.collision_layer = 0
+	hitbox.collision_mask = 2 # Enemy hurtbox layer
+	add_child(hitbox)
+	
+	hitbox_shape = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	rect.size = Vector2(100, 90)
+	hitbox_shape.shape = rect
+	hitbox_shape.position = Vector2(60, 0)
+	hitbox_shape.disabled = true
+	hitbox.add_child(hitbox_shape)
+	
+	hitbox.area_entered.connect(_on_hitbox_hit)
+
+func _on_hitbox_hit(area: Area2D):
+	if area.name == "Hurtbox" and area.get_parent().has_method("take_damage"):
+		var dmg = 10 + (combo_step * 5)
+		var force = 150 + (combo_step * 100)
+		var dir = 1.0 if facing_right else -1.0
+		area.get_parent().take_damage(dmg, dir, force)
+		if combo_step < 3:
+			hit_stop(0.03)
 
 func _physics_process(delta: float) -> void:
 	# --- Gravity ---
@@ -90,18 +132,31 @@ func _physics_process(delta: float) -> void:
 	var is_airborne: bool = not is_on_floor()
 
 	# Read one-shot actions once so every state sees the same press.
-	var jump_pressed := InputManager.is_action_just_pressed("jump")
-	var slide_pressed := InputManager.is_action_just_pressed("slide")
-	var dodge_pressed := InputManager.is_action_just_pressed("dodge")
-	var attack_pressed := InputManager.is_action_just_pressed("attack_light")
+	var jump_pressed: bool = bool(InputManager.is_action_just_pressed("jump"))
+	var slide_pressed: bool = bool(InputManager.is_action_just_pressed("slide"))
+	var dodge_pressed: bool = bool(InputManager.is_action_just_pressed("dodge"))
+	var attack_pressed: bool = bool(InputManager.is_action_just_pressed("attack_light"))
 	update_action_buffers(delta, jump_pressed, slide_pressed, dodge_pressed, attack_pressed)
 	
 	# --- Attack timer ---
 	if is_attacking:
 		attack_timer -= delta
+		
+		# Enable hitbox in the active frames of the attack
+		if attack_timer > 0.05 and attack_timer < 0.22:
+			hitbox_shape.disabled = false
+			hitbox_shape.position.x = 60 if facing_right else -60
+		else:
+			hitbox_shape.disabled = true
+			
 		if attack_timer <= 0.0:
 			is_attacking = false
 			anim.speed_scale = 1.0
+			hitbox_shape.disabled = true
+	elif combo_step > 0:
+		combo_reset_timer -= delta
+		if combo_reset_timer <= 0.0:
+			combo_step = 0
 	
 	# --- Air slide timer ---
 	if is_air_sliding:
@@ -367,22 +422,46 @@ func create_speed_line():
 	tween.tween_callback(line.queue_free)
 
 # ------------------------------------------------------------
-# GROUND ATTACK
+# GROUND ATTACK (COMBO SYSTEM)
 # ------------------------------------------------------------
 func do_attack():
 	is_attacking = true
-	anim.speed_scale = 1.08
+	combo_step += 1
+	if combo_step > 3:
+		combo_step = 1
+		
+	anim.speed_scale = 1.1 + (combo_step * 0.15)
 	anim.play("attack")
+	
+	var anim_length: float = 0.25
+	var dash_dir = 1 if facing_right else -1
+	
+	if combo_step == 1:
+		anim.frame = 0
+		anim_length = 0.22
+		velocity.x = dash_dir * attack_move_speed * 1.5
+	elif combo_step == 2:
+		anim.frame = 4
+		anim_length = 0.22
+		velocity.x = dash_dir * attack_move_speed * 2.0
+	elif combo_step == 3:
+		anim.frame = 7
+		anim_length = 0.35
+		velocity.x = dash_dir * attack_move_speed * 3.5
+		shake_camera(0.15, 6.0)
+		spawn_dust_burst(4)
+		hit_stop(0.06)
+		
 	play_transition(Vector2(1.08, 0.96), 0.14)
 	
-	var anim_length: float = 0.4
-	if anim.sprite_frames.has_animation("attack"):
-		var frame_count := anim.sprite_frames.get_frame_count("attack")
-		var fps := anim.sprite_frames.get_animation_speed("attack") * anim.speed_scale
-		if fps > 0:
-			anim_length = frame_count / fps
-	
 	attack_timer = anim_length
+	combo_reset_timer = combo_window
+
+func hit_stop(duration: float) -> void:
+	get_tree().paused = true
+	# create_timer(time_sec, process_always, process_in_physics, ignore_time_scale)
+	await get_tree().create_timer(duration, true, false, true).timeout
+	get_tree().paused = false
 
 # ------------------------------------------------------------
 # GROUND DASH
