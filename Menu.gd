@@ -1,7 +1,7 @@
 extends Control
 
 # ==============================================================================
-# AAA CINEMATIC HOME SCREEN & MAIN MENU SYSTEM - BLADE ARENA 2D
+# AAA CINEMATIC MAIN MENU & BATTLE PREPARATION SYSTEM - BLADE ARENA 2D
 # ==============================================================================
 
 # Submenu states
@@ -9,6 +9,7 @@ enum MenuState {
 	HOME,
 	CHARACTER_SELECT,
 	BACKGROUND_SELECT,
+	HOW_TO_PLAY,
 	SETTINGS
 }
 
@@ -24,12 +25,18 @@ var current_state: MenuState = MenuState.HOME
 @onready var home_view: Control = $Views/HomeView
 @onready var char_select_view: Control = $Views/CharacterSelectView
 @onready var bg_select_view: Control = $Views/BackgroundSelectView
+@onready var how_to_play_view: Control = $Views/HowToPlayView
 @onready var settings_view: Control = $Views/SettingsView
 
 # Character preview in home
 @onready var hero_preview_sprite: Sprite2D = $BackgroundLayer/HeroStage/HeroSprite
 @onready var hero_glow_sprite: Sprite2D = $BackgroundLayer/HeroStage/HeroGlow
 @onready var hero_stage: Control = $BackgroundLayer/HeroStage
+
+# Home Screen Warrior Badge
+@onready var badge_warrior_name: Label = $Views/HomeView/HeroBadge/VBox/BadgeWarriorName
+@onready var badge_weapon: Label = $Views/HomeView/HeroBadge/VBox/BadgeWeapon
+@onready var test_strike_btn: Button = $Views/HomeView/HeroBadge/VBox/TestStrikeBtn
 
 # Character Select View Nodes
 @onready var char_cards_container: HBoxContainer = $Views/CharacterSelectView/CenterArea/CharacterCards
@@ -68,6 +75,10 @@ var current_state: MenuState = MenuState.HOME
 # Intro cover
 @onready var intro_overlay: ColorRect = $IntroOverlay
 
+# Animated hero node on hero stage
+var hero_anim: AnimatedSprite2D
+var is_performing_strike: bool = false
+
 # Dynamic selection caches
 var previewing_char_id: String = "blade_master"
 var previewing_bg_id: String = "cyberpunk"
@@ -83,6 +94,9 @@ var target_parallax: Vector2 = Vector2.ZERO
 func _ready():
 	# Seamless audio start without restarting if already playing
 	AudioManager.play_menu_music(1.2)
+	
+	# Setup Animated Sprite for Hero Stage
+	_setup_hero_stage()
 	
 	# Apply current persistent state
 	previewing_char_id = GameState.selected_character
@@ -122,14 +136,19 @@ func _update_parallax(delta: float):
 	if bg_texture_rect:
 		bg_texture_rect.position = Vector2(-20, -15) - mouse_parallax * 0.7
 	if hero_stage:
-		hero_stage.position = Vector2(1340, 540) + mouse_parallax * 1.2
+		hero_stage.position = Vector2(1340, 480) + mouse_parallax * 1.2
 
 var breath_time: float = 0.0
 func _update_hero_stage_breathing(delta: float):
 	breath_time += delta
-	if hero_preview_sprite:
-		hero_preview_sprite.position.y = sin(breath_time * 1.8) * 8.0
+	var bob_y = sin(breath_time * 1.8) * 6.0
+	if hero_anim:
+		hero_anim.position.y = bob_y
+	elif hero_preview_sprite:
+		hero_preview_sprite.position.y = bob_y
+		
 	if hero_glow_sprite:
+		hero_glow_sprite.position.y = bob_y * 0.5
 		hero_glow_sprite.modulate.a = 0.45 + sin(breath_time * 2.2) * 0.2
 
 func _setup_floating_particles():
@@ -188,13 +207,13 @@ func _play_intro_sequence():
 # ------------------------------------------------------------------------------
 func _switch_view(new_state: MenuState, immediate: bool = false):
 	current_state = new_state
-	var views = [home_view, char_select_view, bg_select_view, settings_view]
+	var views = [home_view, char_select_view, bg_select_view, how_to_play_view, settings_view]
 	var target_view: Control
 	match new_state:
 		MenuState.HOME:
 			target_view = home_view
-			# Hero stage visible on home
 			hero_stage.visible = true
+			_update_hero_stage(GameState.selected_character)
 		MenuState.CHARACTER_SELECT:
 			target_view = char_select_view
 			hero_stage.visible = false
@@ -203,12 +222,17 @@ func _switch_view(new_state: MenuState, immediate: bool = false):
 			target_view = bg_select_view
 			hero_stage.visible = false
 			_select_bg_preview(GameState.selected_background)
+		MenuState.HOW_TO_PLAY:
+			target_view = how_to_play_view
+			hero_stage.visible = false
 		MenuState.SETTINGS:
 			target_view = settings_view
 			hero_stage.visible = false
 			_sync_settings_controls()
 	
 	for v in views:
+		if v == null:
+			continue
 		if v == target_view:
 			v.visible = true
 			if not immediate:
@@ -247,7 +271,6 @@ func _apply_environment(bg_id: String, immediate: bool = false):
 	_refresh_particle_colors()
 
 func _setup_background_selection_view():
-	# Clear children
 	for child in bg_grid_container.get_children():
 		child.queue_free()
 	
@@ -287,7 +310,6 @@ func _setup_background_selection_view():
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(lbl)
 		
-		# Border styling
 		_style_interactive_card(card, id == GameState.selected_background)
 		
 		card.pressed.connect(func():
@@ -309,10 +331,8 @@ func _select_bg_preview(bg_id: String):
 	bg_tag_lbl.text = data["tag"]
 	bg_desc_lbl.text = data["description"]
 	
-	# Preview live on the main menu immediately as requested
 	_apply_environment(bg_id, false)
 	
-	# Update cards active state
 	var all_ids = GameState.get_all_background_ids()
 	var cards = bg_grid_container.get_children()
 	for i in range(min(all_ids.size(), cards.size())):
@@ -332,16 +352,78 @@ func _on_confirm_bg_pressed():
 	_select_bg_preview(previewing_bg_id)
 
 # ------------------------------------------------------------------------------
-# 4. CHARACTER SELECTION
+# 4. CHARACTER SELECTION & ANIMATED HERO STAGE
 # ------------------------------------------------------------------------------
+func _setup_hero_stage():
+	if hero_stage and hero_anim == null:
+		hero_anim = AnimatedSprite2D.new()
+		hero_anim.scale = Vector2(2.8, 2.8)
+		hero_stage.add_child(hero_anim)
+	if hero_preview_sprite:
+		hero_preview_sprite.visible = false
+
 func _update_hero_stage(char_id: String):
 	var data = GameState.get_character_data(char_id)
-	if not data or not ResourceLoader.exists(data["preview_texture"]):
+	if not data:
 		return
 	
-	hero_preview_sprite.texture = load(data["preview_texture"])
+	if hero_anim and ResourceLoader.exists(data["frames_path"]):
+		hero_anim.sprite_frames = load(data["frames_path"])
+		if char_id == "blade_master":
+			if hero_anim.sprite_frames.has_animation("idle_sword"):
+				hero_anim.play("idle_sword")
+		else:
+			if hero_anim.sprite_frames.has_animation("idle"):
+				hero_anim.play("idle")
+		hero_anim.visible = true
+	elif hero_preview_sprite and ResourceLoader.exists(data["preview_texture"]):
+		hero_preview_sprite.texture = load(data["preview_texture"])
+		hero_preview_sprite.visible = true
+	
 	var accent: Color = Color(0.0, 0.85, 1.0) if char_id == "blade_master" else Color(1.0, 0.45, 0.1)
-	hero_glow_sprite.modulate = accent * Color(1, 1, 1, 0.5)
+	if hero_glow_sprite:
+		hero_glow_sprite.modulate = accent * Color(1, 1, 1, 0.5)
+	
+	_update_home_warrior_badge(char_id)
+
+func _update_home_warrior_badge(char_id: String):
+	var data = GameState.get_character_data(char_id)
+	if not data:
+		return
+	if badge_warrior_name:
+		badge_warrior_name.text = data["name"]
+	if badge_weapon:
+		badge_weapon.text = "WEAPON: " + data["weapon"].to_upper()
+		var color = Color(0.0, 0.85, 1.0) if char_id == "blade_master" else Color(1.0, 0.55, 0.2)
+		badge_weapon.add_theme_color_override("font_color", color)
+
+func _on_test_strike_pressed():
+	if is_performing_strike or hero_anim == null or hero_anim.sprite_frames == null:
+		return
+	is_performing_strike = true
+	AudioManager.play_blade_slash()
+	
+	var anim_name = "attack"
+	if GameState.selected_character == "shadow_fighter":
+		anim_name = "attack_combo"
+	elif not hero_anim.sprite_frames.has_animation("attack"):
+		anim_name = "idle_sword"
+	
+	if hero_anim.sprite_frames.has_animation(anim_name):
+		hero_anim.play(anim_name)
+		if hero_glow_sprite:
+			var tw = create_tween()
+			tw.tween_property(hero_glow_sprite, "scale", Vector2(7.2, 7.2), 0.12).set_trans(Tween.TRANS_QUAD)
+			tw.tween_property(hero_glow_sprite, "scale", Vector2(5.5, 5.5), 0.25).set_trans(Tween.TRANS_SINE)
+		await hero_anim.animation_finished
+	
+	if GameState.selected_character == "blade_master":
+		if hero_anim.sprite_frames.has_animation("idle_sword"):
+			hero_anim.play("idle_sword")
+	else:
+		if hero_anim.sprite_frames.has_animation("idle"):
+			hero_anim.play("idle")
+	is_performing_strike = false
 
 func _setup_character_selection_view():
 	for child in char_cards_container.get_children():
@@ -422,7 +504,6 @@ func _select_char_preview(char_id: String):
 	_animate_progress_bar(char_stat_range, stats.get("Range", 50))
 	_animate_progress_bar(char_stat_defense, stats.get("Defense", 50))
 	
-	# Update card highlights
 	var all_chars = GameState.get_all_character_ids()
 	var cards = char_cards_container.get_children()
 	for i in range(min(all_chars.size(), cards.size())):
@@ -436,11 +517,13 @@ func _select_char_preview(char_id: String):
 		char_confirm_btn.disabled = false
 
 func _animate_progress_bar(pbar: ProgressBar, target_val: float):
+	if pbar == null:
+		return
 	var tw = create_tween()
 	tw.tween_property(pbar, "value", target_val, 0.35).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 func _on_confirm_char_pressed():
-	AudioManager.play_click()
+	AudioManager.play_blade_slash()
 	GameState.selected_character = previewing_char_id
 	GameState.save_settings()
 	_update_hero_stage(previewing_char_id)
@@ -512,15 +595,17 @@ func _on_particles_toggled(toggled_on: bool):
 # 6. BUTTON ACTIONS & POLISHED HOVER EFFECTS
 # ------------------------------------------------------------------------------
 func _setup_button_effects():
-	# Gather all interactable buttons
 	var buttons = [
 		$Views/HomeView/MenuContainer/PlayBtn,
 		$Views/HomeView/MenuContainer/CharacterBtn,
 		$Views/HomeView/MenuContainer/BackgroundBtn,
+		$Views/HomeView/MenuContainer/GuideBtn,
 		$Views/HomeView/MenuContainer/SettingsBtn,
 		$Views/HomeView/MenuContainer/ExitBtn,
+		test_strike_btn,
 		$Views/CharacterSelectView/BackBtn,
 		$Views/BackgroundSelectView/BackBtn,
+		$Views/HowToPlayView/BackBtn,
 		$Views/SettingsView/BackBtn,
 		char_confirm_btn,
 		bg_confirm_btn,
@@ -584,13 +669,12 @@ func _style_interactive_card(btn: Button, is_active: bool):
 # 7. MAIN MENU NAVIGATION SIGNALS
 # ------------------------------------------------------------------------------
 func _on_play_btn_pressed():
-	AudioManager.play_click()
-	# Transition music down smoothly and change scene to main combat arena
+	AudioManager.play_blade_slash()
 	AudioManager.stop_menu_music(0.8)
 	
 	intro_overlay.visible = true
 	var tw = create_tween()
-	tw.tween_property(intro_overlay, "modulate:a", 1.0, 0.6).set_trans(Tween.TRANS_QUAD)
+	tw.tween_property(intro_overlay, "modulate:a", 1.0, 0.55).set_trans(Tween.TRANS_QUAD)
 	tw.tween_callback(func():
 		get_tree().change_scene_to_file("res://main.tscn")
 	)
@@ -603,13 +687,16 @@ func _on_background_btn_pressed():
 	AudioManager.play_click()
 	_switch_view(MenuState.BACKGROUND_SELECT)
 
+func _on_guide_btn_pressed():
+	AudioManager.play_click()
+	_switch_view(MenuState.HOW_TO_PLAY)
+
 func _on_settings_btn_pressed():
 	AudioManager.play_click()
 	_switch_view(MenuState.SETTINGS)
 
 func _on_back_to_home_pressed():
 	AudioManager.play_click()
-	# Re-apply current saved background in case user previewed without saving
 	_apply_environment(GameState.selected_background, false)
 	_update_hero_stage(GameState.selected_character)
 	_switch_view(MenuState.HOME)

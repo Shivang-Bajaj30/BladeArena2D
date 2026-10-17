@@ -347,43 +347,54 @@ offset_top = -100.0
 offset_right = 520.0
 offset_bottom = 340.0
 grow_vertical = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 14
 
 [node name="PlayBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 68)
+custom_minimum_size = Vector2(380, 66)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "▶  PLAY COMBAT"
+text = "▶  ENTER ARENA"
 alignment = 0
 
 [node name="CharacterBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 60)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "👤  SELECT CHARACTER"
+text = "🥋  SELECT WARRIOR"
 alignment = 0
 
 [node name="BackgroundBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 60)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
-text = "🎨  CHANGE BACKGROUND"
+text = "⛩  SELECT ARENA"
+alignment = 0
+
+[node name="GuideBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(380, 58)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "📜  HOW TO PLAY & COMBOS"
 alignment = 0
 
 [node name="SettingsBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 60)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
@@ -394,7 +405,7 @@ text = "⚙  SETTINGS"
 alignment = 0
 
 [node name="ExitBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 52)
+custom_minimum_size = Vector2(380, 50)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 18
@@ -403,6 +414,51 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "✕  EXIT GAME"
 alignment = 0
+
+[node name="HeroBadge" type="PanelContainer" parent="Views/HomeView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 180.0
+offset_top = 265.0
+offset_right = 580.0
+offset_bottom = 380.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
+
+[node name="VBox" type="VBoxContainer" parent="Views/HomeView/HeroBadge"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 6
+
+[node name="BadgeWarriorName" type="Label" parent="Views/HomeView/HeroBadge/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "KAGE • BLADE MASTER"
+horizontal_alignment = 1
+
+[node name="BadgeWeapon" type="Label" parent="Views/HomeView/HeroBadge/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 13
+text = "DUAL KATANA & MURASAME"
+horizontal_alignment = 1
+
+[node name="TestStrikeBtn" type="Button" parent="Views/HomeView/HeroBadge/VBox"]
+custom_minimum_size = Vector2(220, 36)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 15
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "⚡ TEST COMBAT STRIKE"
 
 [node name="CharacterSelectView" type="Control" parent="Views"]
 visible = false
@@ -770,6 +826,399 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_confirm_disabled")
 text = "EQUIP ENVIRONMENT"
 
+[node name="HowToPlayView" type="Control" parent="Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBtn" type="Button" parent="Views/HowToPlayView"]
+custom_minimum_size = Vector2(160, 48)
+layout_mode = 0
+offset_left = 60.0
+offset_top = 115.0
+offset_right = 220.0
+offset_bottom = 163.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "◀ BACK"
+
+[node name="HeaderLabel" type="Label" parent="Views/HowToPlayView"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 118.0
+offset_right = 820.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "COMBAT DIRECTIVE & MOVE LIST"
+
+[node name="Content" type="HBoxContainer" parent="Views/HowToPlayView"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 60.0
+offset_top = 190.0
+offset_right = -60.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 28
+
+[node name="KeyboardCard" type="Panel" parent="Views/HowToPlayView/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
+
+[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "⌨ KEYBOARD CONTROLS"
+
+[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.18, 0.3, 0.45, 0.6)
+
+[node name="Row1" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row1"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[A] / [D]"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Move Left / Right"
+
+[node name="Row2" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row2"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[SHIFT] + Move"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "High-Velocity Sprint"
+
+[node name="Row3" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row3"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[SPACE]"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Jump / Wall Spring"
+
+[node name="Row4" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row4"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[S] / [DOWN]"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Ground Slide (Low Profile)"
+
+[node name="Row5" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row5"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[F] / [DODGE]"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row5"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Shadow Dash / Air Dash"
+
+[node name="Row6" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row6"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[LEFT CLICK]"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Strike / 3-Hit Combo Chain"
+
+[node name="Row7" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row7"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "[ESC]"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row7"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Pause Tactical Match"
+
+[node name="TouchCard" type="Panel" parent="Views/HowToPlayView/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
+
+[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/TouchCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 14
+
+[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "📱 MOBILE / TOUCH CONTROLS"
+
+[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.18, 0.3, 0.45, 0.6)
+
+[node name="Row1" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row1"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Virtual Joystick"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row1"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Fluid Walking Navigation"
+
+[node name="Row2" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row2"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Outer Edge Push"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Engage Ninja Sprint"
+
+[node name="Row3" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row3"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Punch Button"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row3"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Strike / Combo Chains"
+
+[node name="Row4" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row4"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Jump Button"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row4"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Ascend / Wall Rebound"
+
+[node name="Row5" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row5"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Dash Button"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row5"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Ground / Air Evasion"
+
+[node name="Row6" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+layout_mode = 2
+
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row6"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 15
+text = "Slide Button"
+
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row6"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
+theme_override_font_sizes/font_size = 15
+text = "Tactical Low Slide"
+
+[node name="CombosCard" type="Panel" parent="Views/HowToPlayView/Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_cyber")
+
+[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/CombosCard"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "⚡ SPECIAL COMBOS & SECRETS"
+
+[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+custom_minimum_size = Vector2(0, 1)
+layout_mode = 2
+color = Color(0.18, 0.3, 0.45, 0.6)
+
+[node name="Combo1Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_font_sizes/font_size = 15
+text = "1. IAIDO SKY SLAM (1250 px/s)"
+
+[node name="Combo1Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "Jump airborne -> Double-tap Attack. Warrior plunges down like lightning delivering ground shockwave!"
+autowrap_mode = 3
+
+[node name="Combo2Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_font_sizes/font_size = 15
+text = "2. SLIDE SLICER INITIATION"
+
+[node name="Combo2Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "Sprint forward -> Press Slide -> Chain into Attack. Duck under high strikes while slicing!"
+autowrap_mode = 3
+
+[node name="Combo3Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_font_sizes/font_size = 15
+text = "3. 3-HIT HIT-STOP FINISHER"
+
+[node name="Combo3Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "Attack x3 Chain. The 3rd strike hits with 25 DMG, 350 knockback force, and a freeze-frame hit-stop!"
+autowrap_mode = 3
+
+[node name="Combo4Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
+theme_override_font_sizes/font_size = 15
+text = "4. AERIAL DASH EVASION"
+
+[node name="Combo4Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
+theme_override_font_sizes/font_size = 13
+text = "Jump -> Press Dash mid-air to phase horizontally past incoming threats."
+autowrap_mode = 3
+
 [node name="SettingsView" type="Control" parent="Views"]
 visible = false
 layout_mode = 1
@@ -946,10 +1395,13 @@ color = Color(0.01, 0.02, 0.04, 1)
 [connection signal="pressed" from="Views/HomeView/MenuContainer/PlayBtn" to="." method="_on_play_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/CharacterBtn" to="." method="_on_character_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/BackgroundBtn" to="." method="_on_background_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/MenuContainer/GuideBtn" to="." method="_on_guide_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/SettingsBtn" to="." method="_on_settings_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/ExitBtn" to="." method="_on_exit_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/HeroBadge/VBox/TestStrikeBtn" to="." method="_on_test_strike_pressed"]
 [connection signal="pressed" from="Views/CharacterSelectView/BackBtn" to="." method="_on_back_to_home_pressed"]
 [connection signal="pressed" from="Views/CharacterSelectView/DetailsPanel/VBox/ConfirmCharBtn" to="." method="_on_confirm_char_pressed"]
 [connection signal="pressed" from="Views/BackgroundSelectView/BackBtn" to="." method="_on_back_to_home_pressed"]
 [connection signal="pressed" from="Views/BackgroundSelectView/Content/PreviewPanel/ConfirmBgBtn" to="." method="_on_confirm_bg_pressed"]
+[connection signal="pressed" from="Views/HowToPlayView/BackBtn" to="." method="_on_back_to_home_pressed"]
 [connection signal="pressed" from="Views/SettingsView/BackBtn" to="." method="_on_back_to_home_pressed"]
