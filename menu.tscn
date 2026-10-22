@@ -128,6 +128,20 @@ corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_card"]
+bg_color = Color(0.06, 0.09, 0.16, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.18, 0.45, 0.75, 0.7)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+shadow_color = Color(0, 0, 0, 0.4)
+shadow_size = 8
+
 [node name="Menu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -317,9 +331,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 120.0
-offset_top = -260.0
+offset_top = -290.0
 offset_right = 650.0
-offset_bottom = -140.0
+offset_bottom = -160.0
 grow_vertical = 2
 theme_override_constants/separation = 4
 
@@ -343,14 +357,14 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 120.0
-offset_top = -100.0
-offset_right = 520.0
-offset_bottom = 340.0
+offset_top = -140.0
+offset_right = 540.0
+offset_bottom = 370.0
 grow_vertical = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 12
 
 [node name="PlayBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 66)
+custom_minimum_size = Vector2(420, 68)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 24
@@ -361,7 +375,7 @@ text = "▶  ENTER ARENA"
 alignment = 0
 
 [node name="CharacterBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 58)
+custom_minimum_size = Vector2(420, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
@@ -372,7 +386,7 @@ text = "🥋  SELECT WARRIOR"
 alignment = 0
 
 [node name="BackgroundBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 58)
+custom_minimum_size = Vector2(420, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
@@ -382,8 +396,19 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "⛩  SELECT ARENA"
 alignment = 0
 
+[node name="RecordsBtn" type="Button" parent="Views/HomeView/MenuContainer"]
+custom_minimum_size = Vector2(420, 58)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "⚔  STATS & RECORDS"
+alignment = 0
+
 [node name="GuideBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 58)
+custom_minimum_size = Vector2(420, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
@@ -394,7 +419,7 @@ text = "📜  HOW TO PLAY & COMBOS"
 alignment = 0
 
 [node name="SettingsBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 58)
+custom_minimum_size = Vector2(420, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
@@ -405,7 +430,7 @@ text = "⚙  SETTINGS"
 alignment = 0
 
 [node name="ExitBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(380, 50)
+custom_minimum_size = Vector2(420, 52)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 18
@@ -1381,6 +1406,287 @@ theme_override_font_sizes/font_size = 18
 button_pressed = true
 text = "Cinematic Ambient Embers & Particle Fog"
 
+[node name="RecordsView" type="Control" parent="Views"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackBtn" type="Button" parent="Views/RecordsView"]
+custom_minimum_size = Vector2(180, 52)
+layout_mode = 0
+offset_left = 60.0
+offset_top = 115.0
+offset_right = 240.0
+offset_bottom = 167.0
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "◀  BACK"
+
+[node name="HeaderLabel" type="Label" parent="Views/RecordsView"]
+layout_mode = 0
+offset_left = 260.0
+offset_top = 118.0
+offset_right = 800.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 32
+text = "WARRIOR CAREER & RECORDS"
+
+[node name="Panel" type="PanelContainer" parent="Views/RecordsView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -520.0
+offset_top = -290.0
+offset_right = 520.0
+offset_bottom = 350.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="DossierHeader" type="HBoxContainer" parent="Views/RecordsView/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TagIcon" type="Label" parent="Views/RecordsView/Panel/VBox/DossierHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 22
+text = "⚡"
+
+[node name="TagText" type="Label" parent="Views/RecordsView/Panel/VBox/DossierHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.88, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "LIFETIME COMBAT PERFORMANCE & STATISTICS"
+
+[node name="Divider" type="ColorRect" parent="Views/RecordsView/Panel/VBox"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+color = Color(0.18, 0.45, 0.75, 0.5)
+
+[node name="Grid" type="GridContainer" parent="Views/RecordsView/Panel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 16
+columns = 3
+
+[node name="CardGames" type="PanelContainer" parent="Views/RecordsView/Panel/VBox/Grid"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox/Grid/CardGames"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardGames/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.8, 0.95, 0.8)
+theme_override_font_sizes/font_size = 14
+text = "TOTAL MATCHES PLAYED"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardGames/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 1
+
+[node name="CardWins" type="PanelContainer" parent="Views/RecordsView/Panel/VBox/Grid"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox/Grid/CardWins"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardWins/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 0.6, 0.85)
+theme_override_font_sizes/font_size = 14
+text = "TOTAL VICTORIES"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardWins/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.95, 0.6, 1)
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 1
+
+[node name="CardLosses" type="PanelContainer" parent="Views/RecordsView/Panel/VBox/Grid"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox/Grid/CardLosses"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardLosses/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.45, 0.45, 0.85)
+theme_override_font_sizes/font_size = 14
+text = "TOTAL DEFEATS"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardLosses/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 36
+text = "0"
+horizontal_alignment = 1
+
+[node name="CardWinRate" type="PanelContainer" parent="Views/RecordsView/Panel/VBox/Grid"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox/Grid/CardWinRate"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardWinRate/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.88, 1, 0.85)
+theme_override_font_sizes/font_size = 14
+text = "WIN PERCENTAGE"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardWinRate/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0.9, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "0.0%"
+horizontal_alignment = 1
+
+[node name="CardLossRate" type="PanelContainer" parent="Views/RecordsView/Panel/VBox/Grid"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox/Grid/CardLossRate"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardLossRate/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.6, 0.6, 0.85)
+theme_override_font_sizes/font_size = 14
+text = "LOSS PERCENTAGE"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardLossRate/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.55, 0.55, 1)
+theme_override_font_sizes/font_size = 36
+text = "0.0%"
+horizontal_alignment = 1
+
+[node name="CardStreak" type="PanelContainer" parent="Views/RecordsView/Panel/VBox/Grid"]
+custom_minimum_size = Vector2(300, 100)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_stat_card")
+
+[node name="VBox" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox/Grid/CardStreak"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardStreak/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.85, 0.2, 0.85)
+theme_override_font_sizes/font_size = 14
+text = "CURRENT STREAK / BEST"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Views/RecordsView/Panel/VBox/Grid/CardStreak/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.88, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "— NONE"
+horizontal_alignment = 1
+
+[node name="RatioSection" type="VBoxContainer" parent="Views/RecordsView/Panel/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="RatioHeader" type="HBoxContainer" parent="Views/RecordsView/Panel/VBox/RatioSection"]
+layout_mode = 2
+
+[node name="WinLbl" type="Label" parent="Views/RecordsView/Panel/VBox/RatioSection/RatioHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 0.6, 1)
+theme_override_font_sizes/font_size = 14
+text = "WIN RATIO"
+
+[node name="Spacer" type="Control" parent="Views/RecordsView/Panel/VBox/RatioSection/RatioHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LossLbl" type="Label" parent="Views/RecordsView/Panel/VBox/RatioSection/RatioHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1.0, 0.4, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "LOSS RATIO"
+
+[node name="RatioBar" type="ProgressBar" parent="Views/RecordsView/Panel/VBox/RatioSection"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
+max_value = 100.0
+value = 50.0
+show_percentage = false
+
+[node name="Actions" type="HBoxContainer" parent="Views/RecordsView/Panel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 24
+
+[node name="ResetStatsBtn" type="Button" parent="Views/RecordsView/Panel/VBox/Actions"]
+custom_minimum_size = Vector2(240, 52)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+text = "🗑  RESET STATS"
+
+[node name="ReturnHomeBtn" type="Button" parent="Views/RecordsView/Panel/VBox/Actions"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_confirm_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_normal")
+text = "✓  BACK TO HOME"
+
 [node name="IntroOverlay" type="ColorRect" parent="."]
 visible = false
 layout_mode = 1
@@ -1395,6 +1701,7 @@ color = Color(0.01, 0.02, 0.04, 1)
 [connection signal="pressed" from="Views/HomeView/MenuContainer/PlayBtn" to="." method="_on_play_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/CharacterBtn" to="." method="_on_character_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/BackgroundBtn" to="." method="_on_background_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/MenuContainer/RecordsBtn" to="." method="_on_records_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/GuideBtn" to="." method="_on_guide_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/SettingsBtn" to="." method="_on_settings_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/ExitBtn" to="." method="_on_exit_btn_pressed"]
@@ -1403,5 +1710,9 @@ color = Color(0.01, 0.02, 0.04, 1)
 [connection signal="pressed" from="Views/CharacterSelectView/DetailsPanel/VBox/ConfirmCharBtn" to="." method="_on_confirm_char_pressed"]
 [connection signal="pressed" from="Views/BackgroundSelectView/BackBtn" to="." method="_on_back_to_home_pressed"]
 [connection signal="pressed" from="Views/BackgroundSelectView/Content/PreviewPanel/ConfirmBgBtn" to="." method="_on_confirm_bg_pressed"]
+[connection signal="pressed" from="Views/RecordsView/BackBtn" to="." method="_on_back_to_home_pressed"]
+[connection signal="pressed" from="Views/RecordsView/Panel/VBox/Actions/ResetStatsBtn" to="." method="_on_reset_stats_pressed"]
+[connection signal="pressed" from="Views/RecordsView/Panel/VBox/Actions/ReturnHomeBtn" to="." method="_on_back_to_home_pressed"]
 [connection signal="pressed" from="Views/HowToPlayView/BackBtn" to="." method="_on_back_to_home_pressed"]
 [connection signal="pressed" from="Views/SettingsView/BackBtn" to="." method="_on_back_to_home_pressed"]
+

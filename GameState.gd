@@ -13,6 +13,13 @@ var is_sfx_enabled: bool = true
 var bloom_enabled: bool = true
 var particles_enabled: bool = true
 
+# Win / Loss Statistics (Persistent)
+var total_games: int = 0
+var total_wins: int = 0
+var total_losses: int = 0
+var current_streak: int = 0 # >0 = win streak, <0 = loss streak, 0 = none
+var best_win_streak: int = 0
+
 func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	load_settings()
@@ -130,6 +137,12 @@ func save_settings():
 	config.set_value("audio", "is_sfx_enabled", is_sfx_enabled)
 	config.set_value("graphics", "bloom_enabled", bloom_enabled)
 	config.set_value("graphics", "particles_enabled", particles_enabled)
+	# Save statistics
+	config.set_value("stats", "total_games", total_games)
+	config.set_value("stats", "total_wins", total_wins)
+	config.set_value("stats", "total_losses", total_losses)
+	config.set_value("stats", "current_streak", current_streak)
+	config.set_value("stats", "best_win_streak", best_win_streak)
 	config.save(SAVE_PATH)
 
 func load_settings():
@@ -144,3 +157,52 @@ func load_settings():
 		is_sfx_enabled = config.get_value("audio", "is_sfx_enabled", true)
 		bloom_enabled = config.get_value("graphics", "bloom_enabled", true)
 		particles_enabled = config.get_value("graphics", "particles_enabled", true)
+		# Load statistics
+		total_games = config.get_value("stats", "total_games", 0)
+		total_wins = config.get_value("stats", "total_wins", 0)
+		total_losses = config.get_value("stats", "total_losses", 0)
+		current_streak = config.get_value("stats", "current_streak", 0)
+		best_win_streak = config.get_value("stats", "best_win_streak", 0)
+
+func record_match_result(is_win: bool) -> void:
+	total_games += 1
+	if is_win:
+		total_wins += 1
+		if current_streak > 0:
+			current_streak += 1
+		else:
+			current_streak = 1
+		if current_streak > best_win_streak:
+			best_win_streak = current_streak
+	else:
+		total_losses += 1
+		if current_streak < 0:
+			current_streak -= 1
+		else:
+			current_streak = -1
+	save_settings()
+
+func get_win_rate() -> float:
+	if total_games == 0:
+		return 0.0
+	return (float(total_wins) / float(total_games)) * 100.0
+
+func get_loss_rate() -> float:
+	if total_games == 0:
+		return 0.0
+	return (float(total_losses) / float(total_games)) * 100.0
+
+func get_streak_display() -> String:
+	if current_streak > 0:
+		return "🔥 %d WINS" % current_streak
+	elif current_streak < 0:
+		return "💀 %d LOSS" % abs(current_streak)
+	return "— NONE"
+
+func reset_records() -> void:
+	total_games = 0
+	total_wins = 0
+	total_losses = 0
+	current_streak = 0
+	best_win_streak = 0
+	save_settings()

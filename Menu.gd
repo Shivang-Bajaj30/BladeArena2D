@@ -9,6 +9,7 @@ enum MenuState {
 	HOME,
 	CHARACTER_SELECT,
 	BACKGROUND_SELECT,
+	RECORDS,
 	HOW_TO_PLAY,
 	SETTINGS
 }
@@ -25,8 +26,21 @@ var current_state: MenuState = MenuState.HOME
 @onready var home_view: Control = $Views/HomeView
 @onready var char_select_view: Control = $Views/CharacterSelectView
 @onready var bg_select_view: Control = $Views/BackgroundSelectView
+@onready var records_view: Control = $Views/RecordsView
 @onready var how_to_play_view: Control = $Views/HowToPlayView
 @onready var settings_view: Control = $Views/SettingsView
+
+# Records View Nodes
+@onready var total_games_val: Label = $Views/RecordsView/Panel/VBox/Grid/CardGames/VBox/Value
+@onready var total_wins_val: Label = $Views/RecordsView/Panel/VBox/Grid/CardWins/VBox/Value
+@onready var total_losses_val: Label = $Views/RecordsView/Panel/VBox/Grid/CardLosses/VBox/Value
+@onready var win_rate_val: Label = $Views/RecordsView/Panel/VBox/Grid/CardWinRate/VBox/Value
+@onready var loss_rate_val: Label = $Views/RecordsView/Panel/VBox/Grid/CardLossRate/VBox/Value
+@onready var streak_val: Label = $Views/RecordsView/Panel/VBox/Grid/CardStreak/VBox/Value
+@onready var ratio_bar: ProgressBar = $Views/RecordsView/Panel/VBox/RatioSection/RatioBar
+@onready var reset_stats_btn: Button = $Views/RecordsView/Panel/VBox/Actions/ResetStatsBtn
+@onready var return_home_btn: Button = $Views/RecordsView/Panel/VBox/Actions/ReturnHomeBtn
+@onready var records_home_btn: Button = $Views/HomeView/MenuContainer/RecordsBtn
 
 # Character preview in home
 @onready var hero_preview_sprite: Sprite2D = $BackgroundLayer/HeroStage/HeroSprite
@@ -207,7 +221,7 @@ func _play_intro_sequence():
 # ------------------------------------------------------------------------------
 func _switch_view(new_state: MenuState, immediate: bool = false):
 	current_state = new_state
-	var views = [home_view, char_select_view, bg_select_view, how_to_play_view, settings_view]
+	var views = [home_view, char_select_view, bg_select_view, records_view, how_to_play_view, settings_view]
 	var target_view: Control
 	match new_state:
 		MenuState.HOME:
@@ -222,6 +236,10 @@ func _switch_view(new_state: MenuState, immediate: bool = false):
 			target_view = bg_select_view
 			hero_stage.visible = false
 			_select_bg_preview(GameState.selected_background)
+		MenuState.RECORDS:
+			target_view = records_view
+			hero_stage.visible = false
+			_sync_records_view()
 		MenuState.HOW_TO_PLAY:
 			target_view = how_to_play_view
 			hero_stage.visible = false
@@ -417,6 +435,10 @@ func _on_test_strike_pressed():
 			tw.tween_property(hero_glow_sprite, "scale", Vector2(5.5, 5.5), 0.25).set_trans(Tween.TRANS_SINE)
 		await hero_anim.animation_finished
 	
+	if not is_instance_valid(hero_anim) or not is_inside_tree():
+		is_performing_strike = false
+		return
+	
 	if GameState.selected_character == "blade_master":
 		if hero_anim.sprite_frames.has_animation("idle_sword"):
 			hero_anim.play("idle_sword")
@@ -592,6 +614,29 @@ func _on_particles_toggled(toggled_on: bool):
 	GameState.save_settings()
 
 # ------------------------------------------------------------------------------
+# 5b. RECORDS / STATS VIEW SYNC
+# ------------------------------------------------------------------------------
+func _sync_records_view():
+	if total_games_val:
+		total_games_val.text = str(GameState.total_games)
+	if total_wins_val:
+		total_wins_val.text = str(GameState.total_wins)
+	if total_losses_val:
+		total_losses_val.text = str(GameState.total_losses)
+	if win_rate_val:
+		win_rate_val.text = "%.1f%%" % GameState.get_win_rate()
+	if loss_rate_val:
+		loss_rate_val.text = "%.1f%%" % GameState.get_loss_rate()
+	if streak_val:
+		var s_text = GameState.get_streak_display()
+		if GameState.best_win_streak > 0:
+			s_text += " (BEST: %d)" % GameState.best_win_streak
+		streak_val.text = s_text
+	if ratio_bar:
+		var wr = GameState.get_win_rate()
+		ratio_bar.value = wr if GameState.total_games > 0 else 50.0
+
+# ------------------------------------------------------------------------------
 # 6. BUTTON ACTIONS & POLISHED HOVER EFFECTS
 # ------------------------------------------------------------------------------
 func _setup_button_effects():
@@ -599,12 +644,16 @@ func _setup_button_effects():
 		$Views/HomeView/MenuContainer/PlayBtn,
 		$Views/HomeView/MenuContainer/CharacterBtn,
 		$Views/HomeView/MenuContainer/BackgroundBtn,
+		records_home_btn,
 		$Views/HomeView/MenuContainer/GuideBtn,
 		$Views/HomeView/MenuContainer/SettingsBtn,
 		$Views/HomeView/MenuContainer/ExitBtn,
 		test_strike_btn,
 		$Views/CharacterSelectView/BackBtn,
 		$Views/BackgroundSelectView/BackBtn,
+		$Views/RecordsView/BackBtn,
+		reset_stats_btn,
+		return_home_btn,
 		$Views/HowToPlayView/BackBtn,
 		$Views/SettingsView/BackBtn,
 		char_confirm_btn,
@@ -670,7 +719,6 @@ func _style_interactive_card(btn: Button, is_active: bool):
 # ------------------------------------------------------------------------------
 func _on_play_btn_pressed():
 	AudioManager.play_blade_slash()
-	AudioManager.stop_menu_music(0.8)
 	
 	intro_overlay.visible = true
 	var tw = create_tween()
@@ -686,6 +734,15 @@ func _on_character_btn_pressed():
 func _on_background_btn_pressed():
 	AudioManager.play_click()
 	_switch_view(MenuState.BACKGROUND_SELECT)
+
+func _on_records_btn_pressed():
+	AudioManager.play_click()
+	_switch_view(MenuState.RECORDS)
+
+func _on_reset_stats_pressed():
+	AudioManager.play_click()
+	GameState.reset_records()
+	_sync_records_view()
 
 func _on_guide_btn_pressed():
 	AudioManager.play_click()

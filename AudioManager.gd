@@ -56,8 +56,6 @@ func _on_bgm_finished():
 		bgm_player.play()
 
 func play_menu_music(fade_in_duration: float = 1.0):
-	if not GameState.is_music_enabled:
-		return
 	if is_playing_bgm and bgm_player and bgm_player.playing:
 		return # Already playing continuously! No reset or restart
 	
@@ -67,6 +65,11 @@ func play_menu_music(fade_in_duration: float = 1.0):
 		bgm_player.stream = bgm_stream
 		
 	is_playing_bgm = true
+	
+	if not GameState.is_music_enabled:
+		bgm_player.volume_db = -80.0
+		return
+
 	var target_volume_db = _vol_to_db(GameState.music_volume)
 	
 	if fade_tween and fade_tween.is_valid():
@@ -104,6 +107,9 @@ func play_click():
 
 func play_blade_slash():
 	# Plays dynamic sharp slash sound
+	play_click()
+
+func play_hit():
 	play_click()
 
 func apply_audio_settings():

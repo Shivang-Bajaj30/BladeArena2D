@@ -54,14 +54,18 @@ func create_base_background():
 	if GameState:
 		var bg_data = GameState.get_background_data(GameState.selected_background)
 		if bg_data and ResourceLoader.exists(bg_data["texture_path"]):
-			var sprite := Sprite2D.new()
+			var sprite: Sprite2D
+			if has_node("Sprite2D"):
+				sprite = $Sprite2D
+			else:
+				sprite = Sprite2D.new()
+				add_child(sprite)
 			sprite.texture = load(bg_data["texture_path"])
 			sprite.position = Vector2(0, 0)
 			# Scale to comfortably cover arena bounds
 			sprite.scale = Vector2(2.4, 2.4)
 			sprite.modulate = Color(1.0, 1.0, 1.0, 0.85)
 			sprite.z_index = -90
-			add_child(sprite)
 
 # ------------------------------------------------------------
 # 2. Fog layers
@@ -96,10 +100,6 @@ func create_ember():
 	var size := randf_range(2, 5)
 	ember.size = Vector2(size, size)
 	ember.color = ember_color
-	ember.position = Vector2(
-		randf_range(-ember_area.x / 2, ember_area.x / 2),
-		randf_range(-ember_area.y / 2, ember_area.y / 2)
-	)
 	
 	var mat := CanvasItemMaterial.new()
 	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
@@ -107,23 +107,27 @@ func create_ember():
 	
 	ember.z_index = -20
 	add_child(ember)
+	_animate_ember(ember, true)
+
+func _animate_ember(ember: ColorRect, initial: bool = false):
+	if not is_instance_valid(ember) or not is_inside_tree():
+		return
+	var start_y = randf_range(-ember_area.y / 2, ember_area.y / 2) if initial else (ember_area.y / 2 + 20)
+	ember.position = Vector2(
+		randf_range(-ember_area.x / 2, ember_area.x / 2),
+		start_y
+	)
+	ember.modulate.a = 1.0
 	
 	var duration := randf_range(4.0, 10.0)
 	var drift_x := randf_range(-30, 30)
 	var rise := randf_range(200, 500)
 	
-	var tween := create_tween()
-	tween.set_loops()
-	tween.parallel().tween_property(ember, "position:x", ember.position.x + drift_x, duration)
-	tween.parallel().tween_property(ember, "position:y", ember.position.y - rise, duration)
-	tween.parallel().tween_property(ember, "modulate:a", 0.0, duration)
-	tween.tween_callback(func():
-		ember.position = Vector2(
-			randf_range(-ember_area.x / 2, ember_area.x / 2),
-			ember_area.y / 2 + 20
-		)
-		ember.modulate.a = 1.0
-	)
+	var tween := create_tween().set_parallel(true)
+	tween.tween_property(ember, "position:x", ember.position.x + drift_x, duration)
+	tween.tween_property(ember, "position:y", ember.position.y - rise, duration)
+	tween.tween_property(ember, "modulate:a", 0.0, duration)
+	tween.chain().tween_callback(_animate_ember.bind(ember, false))
 
 # ------------------------------------------------------------
 # 4. Glowing orbs
@@ -155,8 +159,11 @@ func create_orb():
 	
 	var tween := create_tween()
 	tween.set_loops()
+	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(orb, "position:x", orb.position.x + drift_x, duration)
 	tween.parallel().tween_property(orb, "position:y", orb.position.y + drift_y, duration)
+	tween.chain().tween_property(orb, "position:x", orb.position.x, duration)
+	tween.parallel().tween_property(orb, "position:y", orb.position.y, duration)
 	
 	var pulse := create_tween()
 	pulse.set_loops()

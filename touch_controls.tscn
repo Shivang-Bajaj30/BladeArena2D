@@ -13,8 +13,8 @@
 [node name="TouchControls" type="CanvasLayer" unique_id=1925361234]
 
 [node name="Joystick" type="TouchScreenButton" parent="." unique_id=510015086]
-position = Vector2(320, 808)
-scale = Vector2(3, 3)
+position = Vector2(300, 790)
+scale = Vector2(3.4, 3.4)
 script = ExtResource("1_1gcqp")
 base_texture = ExtResource("2_ojhyh")
 knob_texture = ExtResource("3_qpxdh")
@@ -36,17 +36,18 @@ grow_vertical = 0
 mouse_filter = 2
 
 [node name="Attack" type="TouchScreenButton" parent="ActionButtons" unique_id=1917842690]
-position = Vector2(-309.00006, -307)
-scale = Vector2(1.0673072, 0.96173066)
+position = Vector2(-330, -325)
+scale = Vector2(1.22, 1.12)
 texture_normal = ExtResource("4_ojhyh")
 script = ExtResource("5_qpxdh")
 action_name = "attack_light"
 
 [node name="Jump" type="TouchScreenButton" parent="ActionButtons" unique_id=1815232350]
-position = Vector2(-302, -545)
-scale = Vector2(0.8269232, 0.7740382)
+position = Vector2(-320, -575)
+scale = Vector2(0.95, 0.90)
 texture_normal = ExtResource("6_dash_bg")
 script = ExtResource("5_qpxdh")
+action_name = "jump"
 
 [node name="Icon" type="Sprite2D" parent="ActionButtons/Jump" unique_id=1413737538]
 position = Vector2(98.61426, 102.505615)
@@ -54,8 +55,8 @@ scale = Vector2(0.13578855, 0.14657024)
 texture = ExtResource("8_jump_icon")
 
 [node name="Slide" type="TouchScreenButton" parent="ActionButtons" unique_id=1393454963]
-position = Vector2(-605, -219)
-scale = Vector2(0.82346153, 0.8186539)
+position = Vector2(-635, -235)
+scale = Vector2(0.95, 0.94)
 texture_normal = ExtResource("6_dash_bg")
 script = ExtResource("5_qpxdh")
 action_name = "slide"
@@ -66,8 +67,8 @@ scale = Vector2(0.13282473, 0.15843727)
 texture = ExtResource("9_slide_icon")
 
 [node name="Dash" type="TouchScreenButton" parent="ActionButtons" unique_id=1386646419]
-position = Vector2(-541, -448.99994)
-scale = Vector2(0.8173071, 0.8317309)
+position = Vector2(-570, -485)
+scale = Vector2(0.94, 0.95)
 texture_normal = ExtResource("6_dash_bg")
 script = ExtResource("5_qpxdh")
 action_name = "dodge"
@@ -76,3 +77,4 @@ action_name = "dodge"
 position = Vector2(98.529396, 101.4706)
 scale = Vector2(0.30445787, 0.29871333)
 texture = ExtResource("7_dash_icon")
+

@@ -22,8 +22,8 @@ extends CharacterBody2D
 @export var sword_slam_speed: float = 1250.0
 @export var air_attack_double_tap_window: float = 0.36
 @export var action_buffer_time: float = 0.34
-@export var left_hud_safe_margin: float = 470.0
-@export var right_hud_safe_margin: float = 450.0
+@export var left_hud_safe_margin: float = 80.0
+@export var right_hud_safe_margin: float = 80.0
 
 @onready var anim: AnimatedSprite2D = $AnimatedSprite2D
 @onready var collision_shape: CollisionShape2D = $CollisionShape2D
@@ -34,7 +34,10 @@ var combo_step: int = 0
 var combo_reset_timer: float = 0.0
 @export var combo_window: float = 0.6
 var is_dashing: bool = false
+var dash_timer: float = 0.0
+var dash_direction: float = 1.0
 var is_air_dashing: bool = false
+var air_dash_timer: float = 0.0
 var is_sliding: bool = false
 var slide_timer: float = 0.0
 var slide_direction: float = 1.0
@@ -63,6 +66,15 @@ var dust_interval: float = 0.05
 var speedline_timer: float = 0.0
 var speedline_interval: float = 0.04
 
+signal health_changed(current_hp: float, max_hp: float)
+signal player_died()
+
+var max_health: float = 100.0
+var current_health: float = 100.0
+var is_invulnerable: bool = false
+var hurtbox: Area2D
+var hurtbox_shape: CollisionShape2D
+
 var hitbox: Area2D
 var hitbox_shape: CollisionShape2D
 
@@ -72,16 +84,71 @@ func _ready():
 		var char_data = GameState.get_character_data(GameState.selected_character)
 		if char_data and ResourceLoader.exists(char_data["frames_path"]):
 			anim.sprite_frames = load(char_data["frames_path"])
+		
+		# Scale movement speed with character speed stat
+		var stats: Dictionary = char_data.get("stats", {})
+		var speed_val: float = float(stats.get("Speed", 85))
+		var speed_mult: float = speed_val / 85.0
+		walk_speed = 200.0 * speed_mult
+		run_speed = 520.0 * speed_mult
+		dash_speed = 900.0 * speed_mult
 	
 	base_anim_scale = anim.scale
 	base_anim_position = anim.position
 	floor_snap_length = 12.0
 	
-	if anim.sprite_frames.has_animation("idle_sword"):
-		anim.play("idle_sword")
-	elif anim.sprite_frames.has_animation("idle"):
-		anim.play("idle")
+	play_character_anim("idle")
 	setup_hitbox()
+	setup_hurtbox()
+
+func play_character_anim(action: String) -> void:
+	if anim == null or anim.sprite_frames == null:
+		return
+	var is_blade: bool = (GameState != null and GameState.selected_character == "blade_master")
+	var target_anim: String = ""
+	match action:
+		"idle":
+			if is_blade and anim.sprite_frames.has_animation("idle_sword"):
+				target_anim = "idle_sword"
+			elif anim.sprite_frames.has_animation("idle"):
+				target_anim = "idle"
+		"walk":
+			if is_blade and anim.sprite_frames.has_animation("walk_sword"):
+				target_anim = "walk_sword"
+			elif anim.sprite_frames.has_animation("walk"):
+				target_anim = "walk"
+		"run":
+			if is_blade and anim.sprite_frames.has_animation("run_sword"):
+				target_anim = "run_sword"
+			elif anim.sprite_frames.has_animation("run"):
+				target_anim = "run"
+		"jump":
+			if is_blade and anim.sprite_frames.has_animation("sword_jump"):
+				target_anim = "sword_jump"
+			elif anim.sprite_frames.has_animation("jump"):
+				target_anim = "jump"
+		"dash":
+			if is_blade and anim.sprite_frames.has_animation("dash_sword"):
+				target_anim = "dash_sword"
+			elif anim.sprite_frames.has_animation("dash"):
+				target_anim = "dash"
+		"slide":
+			if is_blade and anim.sprite_frames.has_animation("slide_sword"):
+				target_anim = "slide_sword"
+			elif anim.sprite_frames.has_animation("slide"):
+				target_anim = "slide"
+		"air_attack":
+			if is_blade and anim.sprite_frames.has_animation("air_attack_sword"):
+				target_anim = "air_attack_sword"
+			elif anim.sprite_frames.has_animation("attack_combo"):
+				target_anim = "attack_combo"
+			elif anim.sprite_frames.has_animation("jump"):
+				target_anim = "jump"
+	if target_anim == "":
+		target_anim = action
+	if anim.sprite_frames.has_animation(target_anim):
+		if anim.animation != target_anim or not anim.is_playing():
+			anim.play(target_anim)
 
 func setup_hitbox():
 	hitbox = Area2D.new()
@@ -108,7 +175,85 @@ func _on_hitbox_hit(area: Area2D):
 		if combo_step < 3:
 			hit_stop(0.03)
 
+func setup_hurtbox():
+	hurtbox = Area2D.new()
+	hurtbox.name = "Hurtbox"
+	hurtbox.collision_layer = 1 # Player hurtbox layer
+	hurtbox.collision_mask = 0
+	add_child(hurtbox)
+	
+	hurtbox_shape = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	rect.size = Vector2(50, 85)
+	hurtbox_shape.shape = rect
+	hurtbox_shape.position = Vector2(0, 0)
+	hurtbox.add_child(hurtbox_shape)
+
+func take_damage(dmg: float, dir: float = 0.0, force: float = 0.0) -> void:
+	if is_invulnerable or current_health <= 0.0:
+		return
+	
+	current_health = max(0.0, current_health - dmg)
+	health_changed.emit(current_health, max_health)
+	
+	if force > 0.0 and dir != 0.0:
+		velocity.x = dir * force
+		velocity.y = -force * 0.25
+	
+	# Damage flash
+	var orig_mod = anim.modulate
+	anim.modulate = Color(2.5, 0.4, 0.4, 1.0)
+	var tw = create_tween()
+	tw.tween_property(anim, "modulate", orig_mod, 0.15)
+	
+	shake_camera(0.12, 8.0)
+	AudioManager.play_hit()
+	
+	if current_health <= 0.0:
+		die()
+	else:
+		is_invulnerable = true
+		get_tree().create_timer(0.2).timeout.connect(func(): is_invulnerable = false)
+
+func die() -> void:
+	if current_health > 0.0:
+		current_health = 0.0
+		health_changed.emit(current_health, max_health)
+	is_attacking = false
+	if hitbox_shape:
+		hitbox_shape.disabled = true
+	var tw = create_tween()
+	tw.tween_property(anim, "modulate", Color(0.9, 0.2, 0.2, 0.75), 0.3)
+	player_died.emit()
+
+func reset_for_round(start_pos: Vector2, look_right: bool = true) -> void:
+	current_health = max_health
+	health_changed.emit(current_health, max_health)
+	is_invulnerable = false
+	is_attacking = false
+	is_dashing = false
+	is_air_dashing = false
+	is_sliding = false
+	is_air_sliding = false
+	is_air_attacking = false
+	is_sword_slamming = false
+	velocity = Vector2.ZERO
+	global_position = start_pos
+	facing_right = look_right
+	anim.flip_h = not look_right
+	anim.modulate = Color(1, 1, 1, 1)
+	if hitbox_shape:
+		hitbox_shape.disabled = true
+	play_character_anim("idle")
+
 func _physics_process(delta: float) -> void:
+	if current_health <= 0.0:
+		if not is_on_floor():
+			velocity.y += gravity * delta
+		velocity.x = move_toward(velocity.x, 0.0, 500.0 * delta)
+		move_and_slide()
+		return
+	
 	# --- Gravity ---
 	if not is_on_floor() and not is_air_dashing and not is_sword_slamming:
 		velocity.y += gravity * delta
@@ -164,6 +309,36 @@ func _physics_process(delta: float) -> void:
 		if air_slide_timer <= 0.0 or is_on_floor():
 			end_air_slide()
 
+	# --- Ground dash timer ---
+	if is_dashing:
+		dash_timer -= delta
+		velocity.x = dash_direction * dash_speed
+		velocity.y = 0.0
+		speedline_timer += delta
+		if speedline_timer >= speedline_interval:
+			speedline_timer = 0.0
+			create_speed_line()
+			create_ghost()
+		move_and_keep_on_screen()
+		if dash_timer <= 0.0:
+			end_dash()
+		return
+
+	# --- Air dash timer ---
+	if is_air_dashing:
+		air_dash_timer -= delta
+		velocity.x = dash_direction * air_dash_speed
+		velocity.y = 0.0
+		speedline_timer += delta
+		if speedline_timer >= speedline_interval:
+			speedline_timer = 0.0
+			create_speed_line()
+			create_ghost()
+		move_and_keep_on_screen()
+		if air_dash_timer <= 0.0 or is_on_floor():
+			end_air_dash()
+		return
+
 	# --- Sword slam ---
 	if is_sword_slamming:
 		process_sword_slam(delta)
@@ -203,14 +378,9 @@ func _physics_process(delta: float) -> void:
 			end_slide()
 		return
 
-	# --- Locked states ---
-	if is_dashing or is_air_dashing:
-		move_and_keep_on_screen()
-		return
-	
 	# --- Air sliding ---
 	if is_air_sliding:
-		velocity.x = (1 if facing_right else -1) * air_slide_speed
+		velocity.x = (1.0 if facing_right else -1.0) * air_slide_speed
 		move_and_keep_on_screen()
 		return
 
@@ -226,6 +396,12 @@ func _physics_process(delta: float) -> void:
 	if slide_buffer > 0.0 and is_on_floor() and not is_attacking:
 		slide_buffer = 0.0
 		do_slide()
+		return
+
+	# --- Air Slide ---
+	if slide_buffer > 0.0 and is_airborne and not is_attacking:
+		slide_buffer = 0.0
+		do_air_slide()
 		return
 	
 	# --- Ground Dash ---
@@ -290,16 +466,16 @@ func _physics_process(delta: float) -> void:
 		if is_moving:
 			if is_on_floor():
 				if is_running:
-					anim.play("run_sword")
+					play_character_anim("run")
 				else:
-					anim.play("walk_sword")
+					play_character_anim("walk")
 			else:
-				anim.play("sword_jump")
+				play_character_anim("jump")
 		else:
 			if is_on_floor():
-				anim.play("idle_sword")
+				play_character_anim("idle")
 			else:
-				anim.play("sword_jump")
+				play_character_anim("jump")
 	
 	move_and_keep_on_screen()
 
@@ -325,7 +501,7 @@ func handle_air_attack_press() -> void:
 	is_air_attacking = true
 	air_attack_timer = air_attack_duration
 	anim.speed_scale = 1.15
-	anim.play("air_attack_sword")
+	play_character_anim("air_attack")
 	play_transition(Vector2(1.08, 0.94), 0.12)
 
 func start_sword_slam() -> void:
@@ -334,7 +510,7 @@ func start_sword_slam() -> void:
 	slam_wind_timer = 0.0
 	velocity = Vector2.ZERO
 	anim.speed_scale = 1.45
-	anim.play("air_attack_sword")
+	play_character_anim("air_attack")
 	play_transition(Vector2(0.88, 1.14), 0.1)
 
 func process_sword_slam(delta: float) -> void:
@@ -354,7 +530,9 @@ func finish_sword_slam() -> void:
 	anim.speed_scale = 1.0
 	is_attacking = true
 	attack_timer = 0.28
-	anim.pause()
+	if hitbox_shape:
+		hitbox_shape.disabled = false
+		hitbox_shape.position = Vector2(0, 15)
 	spawn_slam_impact()
 	shake_camera(0.22, 13.0)
 
@@ -402,6 +580,8 @@ func get_collision_half_width() -> float:
 # WHITE SPEED LINES
 # ------------------------------------------------------------
 func create_speed_line():
+	if not is_inside_tree() or get_parent() == null:
+		return
 	var line := ColorRect.new()
 	var length := randf_range(30, 70)
 	var thickness := randf_range(1, 3)
@@ -431,21 +611,29 @@ func do_attack():
 		combo_step = 1
 		
 	anim.speed_scale = 1.1 + (combo_step * 0.15)
-	anim.play("attack")
+	var is_blade: bool = (GameState != null and GameState.selected_character == "blade_master")
+	var target_anim: String = "attack" if is_blade else "attack_combo"
+	if not anim.sprite_frames.has_animation(target_anim):
+		target_anim = "attack_combo" if anim.sprite_frames.has_animation("attack_combo") else "attack"
+	if not anim.sprite_frames.has_animation(target_anim):
+		target_anim = "idle"
 	
+	anim.play(target_anim)
+	
+	var frame_count: int = anim.sprite_frames.get_frame_count(target_anim) if anim.sprite_frames.has_animation(target_anim) else 1
 	var anim_length: float = 0.25
-	var dash_dir = 1 if facing_right else -1
+	var dash_dir := 1.0 if facing_right else -1.0
 	
 	if combo_step == 1:
 		anim.frame = 0
 		anim_length = 0.22
 		velocity.x = dash_dir * attack_move_speed * 1.5
 	elif combo_step == 2:
-		anim.frame = 4
+		anim.frame = clampi(int(frame_count * 0.35), 0, frame_count - 1)
 		anim_length = 0.22
 		velocity.x = dash_dir * attack_move_speed * 2.0
 	elif combo_step == 3:
-		anim.frame = 7
+		anim.frame = clampi(int(frame_count * 0.65), 0, frame_count - 1)
 		anim_length = 0.35
 		velocity.x = dash_dir * attack_move_speed * 3.5
 		shake_camera(0.15, 6.0)
@@ -458,9 +646,15 @@ func do_attack():
 	combo_reset_timer = combo_window
 
 func hit_stop(duration: float) -> void:
+	if get_tree() == null or get_tree().paused:
+		return
 	get_tree().paused = true
-	# create_timer(time_sec, process_always, process_in_physics, ignore_time_scale)
 	await get_tree().create_timer(duration, true, false, true).timeout
+	if not is_inside_tree() or get_tree() == null:
+		return
+	var main = get_tree().current_scene
+	if main and "is_game_paused" in main and main.is_game_paused:
+		return
 	get_tree().paused = false
 
 # ------------------------------------------------------------
@@ -468,48 +662,56 @@ func hit_stop(duration: float) -> void:
 # ------------------------------------------------------------
 func do_dash():
 	is_dashing = true
-	anim.play("dash_sword")
+	dash_timer = dash_duration
+	dash_direction = 1.0 if facing_right else -1.0
+	speedline_timer = 0.0
+	ghost_timer = 0.0
+	anim.position = base_anim_position
+	anim.scale = base_anim_scale
+	play_character_anim("dash")
 	play_transition(Vector2(1.12, 0.9), 0.12)
-	
-	var dash_dir := 1 if facing_right else -1
-	velocity.x = dash_dir * dash_speed
-	velocity.y = 0
-	
-	var elapsed := 0.0
-	while elapsed < dash_duration:
-		create_speed_line()
-		create_speed_line()
-		create_ghost()
-		await get_tree().create_timer(0.03).timeout
-		elapsed += 0.03
-		move_and_keep_on_screen()
-	
-	velocity.x = 0
+	velocity.x = dash_direction * dash_speed
+	velocity.y = 0.0
+	create_speed_line()
+	create_ghost()
+
+func end_dash():
+	if not is_dashing:
+		return
 	is_dashing = false
-	anim.play("idle_sword")
+	dash_timer = 0.0
+	velocity.x = 0.0
+	anim.scale = base_anim_scale
+	anim.position = base_anim_position
+	play_character_anim("idle")
 
 # ------------------------------------------------------------
 # AIR DASH
 # ------------------------------------------------------------
 func do_air_dash():
 	is_air_dashing = true
-	anim.play("dash_sword")
+	air_dash_timer = air_dash_duration
+	dash_direction = 1.0 if facing_right else -1.0
+	speedline_timer = 0.0
+	ghost_timer = 0.0
+	anim.position = base_anim_position
+	anim.scale = base_anim_scale
+	play_character_anim("dash")
 	anim.speed_scale = 1.3
-	
-	var dash_dir := 1 if facing_right else -1
-	velocity.x = dash_dir * air_dash_speed
-	velocity.y = -100
-	
-	var elapsed := 0.0
-	while elapsed < air_dash_duration:
-		create_speed_line()
-		create_ghost()
-		await get_tree().create_timer(0.03).timeout
-		elapsed += 0.03
-		move_and_keep_on_screen()
-	
-	anim.speed_scale = 1.0
+	velocity.x = dash_direction * air_dash_speed
+	velocity.y = -80.0
+	create_speed_line()
+	create_ghost()
+
+func end_air_dash():
+	if not is_air_dashing:
+		return
 	is_air_dashing = false
+	air_dash_timer = 0.0
+	anim.speed_scale = 1.0
+	anim.scale = base_anim_scale
+	anim.position = base_anim_position
+	play_character_anim("jump" if not is_on_floor() else "idle")
 
 # ------------------------------------------------------------
 # GROUND SLIDE
@@ -522,7 +724,7 @@ func do_slide():
 	anim.position = base_anim_position
 	anim.scale = base_anim_scale
 	anim.speed_scale = 1.15
-	anim.play("slide_sword")
+	play_character_anim("slide")
 	velocity = Vector2(slide_direction * slide_speed, 0.0)
 	spawn_dust_burst(5)
 
@@ -536,7 +738,7 @@ func end_slide() -> void:
 	anim.scale = base_anim_scale
 	anim.position = base_anim_position
 	spawn_dust_burst(3)
-	anim.play("idle_sword")
+	play_character_anim("idle")
 
 # ------------------------------------------------------------
 # AIR SLIDE
@@ -544,22 +746,25 @@ func end_slide() -> void:
 func do_air_slide():
 	is_air_sliding = true
 	air_slide_timer = air_slide_duration
-	anim.play("slide_sword")
-	anim.scale = base_anim_scale * Vector2(1.1, 0.85)
 	anim.position = base_anim_position
-	velocity.x = (1 if facing_right else -1) * air_slide_speed
+	anim.scale = base_anim_scale * Vector2(1.1, 0.85)
+	play_character_anim("slide")
+	velocity.x = (1.0 if facing_right else -1.0) * air_slide_speed
+	spawn_dust_burst(4)
 
 func end_air_slide():
 	is_air_sliding = false
 	anim.scale = base_anim_scale
 	anim.position = base_anim_position
-	anim.play("idle_sword")
-	spawn_dust_burst(6)
+	play_character_anim("jump" if not is_on_floor() else "idle")
+	spawn_dust_burst(4)
 
 # ------------------------------------------------------------
 # SWORD SLAM EFFECTS
 # ------------------------------------------------------------
 func create_slam_wind() -> void:
+	if not is_inside_tree() or get_parent() == null:
+		return
 	var streak := ColorRect.new()
 	streak.size = Vector2(randf_range(3.0, 6.0), randf_range(35.0, 75.0))
 	streak.color = Color(0.8, 0.9, 1.0, randf_range(0.35, 0.7))
@@ -584,6 +789,8 @@ func spawn_slam_impact() -> void:
 		create_slam_stone()
 
 func create_impact_shockwave() -> void:
+	if not is_inside_tree() or get_parent() == null:
+		return
 	var wave := Line2D.new()
 	wave.width = 7.0
 	wave.default_color = Color(0.85, 0.9, 1.0, 0.9)
@@ -599,6 +806,8 @@ func create_impact_shockwave() -> void:
 	tween.chain().tween_callback(wave.queue_free)
 
 func create_slam_stone() -> void:
+	if not is_inside_tree() or get_parent() == null:
+		return
 	var stone := Polygon2D.new()
 	var size := randf_range(5.0, 13.0)
 	stone.polygon = PackedVector2Array([
@@ -631,7 +840,7 @@ func shake_camera(duration: float, strength: float) -> void:
 	if not camera:
 		return
 	var elapsed := 0.0
-	while elapsed < duration:
+	while elapsed < duration and is_instance_valid(camera) and is_inside_tree() and get_tree() != null:
 		camera.offset = Vector2(
 			randf_range(-strength, strength),
 			randf_range(-strength * 0.55, strength * 0.55)
@@ -639,12 +848,15 @@ func shake_camera(duration: float, strength: float) -> void:
 		await get_tree().create_timer(0.025).timeout
 		elapsed += 0.025
 		strength *= 0.82
-	camera.offset = Vector2.ZERO
+	if is_instance_valid(camera):
+		camera.offset = Vector2.ZERO
 
 # ------------------------------------------------------------
 # DUST
 # ------------------------------------------------------------
 func create_dust():
+	if not is_inside_tree() or get_parent() == null:
+		return
 	var dust := ColorRect.new()
 	dust.color = Color(
 		randf_range(0.6, 0.8),
@@ -674,6 +886,8 @@ func create_dust():
 
 func spawn_dust_burst(count: int):
 	for i in range(count):
+		if not is_inside_tree() or get_tree() == null:
+			return
 		create_dust()
 		await get_tree().create_timer(0.02).timeout
 
@@ -681,6 +895,8 @@ func spawn_dust_burst(count: int):
 # GHOST TRAIL
 # ------------------------------------------------------------
 func create_ghost():
+	if not is_inside_tree() or get_parent() == null:
+		return
 	var ghost: AnimatedSprite2D = anim.duplicate()
 	get_parent().add_child(ghost)
 	ghost.global_transform = anim.global_transform

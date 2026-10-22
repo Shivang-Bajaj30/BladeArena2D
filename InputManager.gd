@@ -33,14 +33,34 @@ var action_press_count: Dictionary = {
 const KEYBOARD_ACTIONS = {
 	"move_right": ["move_right", "ui_right"],
 	"move_left": ["move_left", "ui_left"],
-	"jump": ["jump", "ui_accept"],
+	"jump": ["jump", "ui_accept", "ui_up"],
 	"attack_light": ["attack_light"],
 	"attack_heavy": ["attack_heavy"],
 	"block": ["block"],
-	"dodge": ["dodge"],
-	"slide": ["slide"],
+	"dodge": ["dodge", "dash", "block"],
+	"slide": ["slide", "ui_down"],
 	"pause": ["pause", "ui_cancel"],
 }
+
+func _ready() -> void:
+	_ensure_action_key("dodge", KEY_F)
+	_ensure_action_key("dodge", KEY_SHIFT)
+	_ensure_action_key("slide", KEY_DOWN)
+	_ensure_action_key("slide", KEY_S)
+	_ensure_action_key("jump", KEY_UP)
+	_ensure_action_key("jump", KEY_SPACE)
+	_ensure_action_key("attack_light", KEY_J)
+	_ensure_action_key("attack_light", KEY_Z)
+
+func _ensure_action_key(action: String, keycode: Key) -> void:
+	if not InputMap.has_action(action):
+		InputMap.add_action(action)
+	for event in InputMap.action_get_events(action):
+		if event is InputEventKey and (event.physical_keycode == keycode or event.keycode == keycode):
+			return
+	var key_event := InputEventKey.new()
+	key_event.physical_keycode = keycode
+	InputMap.action_add_event(action, key_event)
 
 # ------------------------------------------------------------
 # Core API
