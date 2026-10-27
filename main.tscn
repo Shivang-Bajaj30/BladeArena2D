@@ -7,7 +7,9 @@
 [ext_resource type="Script" uid="uid://cu351afhowkww" path="res://CameraFollow.gd" id="5_camera_follow"]
 [ext_resource type="Texture2D" uid="uid://bdnebpbm4g85m" path="res://Stick Figure Character Sprites 2D/Extras/sidewall.png" id="6_sidewall"]
 [ext_resource type="Texture2D" uid="uid://c0gfm6cf6ha5u" path="res://Stick Figure Character Sprites 2D/Extras/rocks.png" id="7_rocks"]
-[ext_resource type="Script" path="res://MainGame.gd" id="8_maingame"]
+[ext_resource type="Script" uid="uid://dirqophrenpji" path="res://MainGame.gd" id="8_maingame"]
+[ext_resource type="PackedScene" path="res://opponent.tscn" id="9_opponent"]
+[ext_resource type="Script" uid="uid://b4eyxp6yp1s71" path="res://GetsugaUltimate.gd" id="10_getsuga"]
 
 [sub_resource type="Shader" id="Shader_environment_blend"]
 code = "shader_type canvas_item;
@@ -43,6 +45,9 @@ script = ExtResource("2_h2yge")
 
 [node name="TouchControls" parent="." unique_id=1925361234 instance=ExtResource("4_1bvp3")]
 
+[node name="GetsugaUltimate" type="CanvasLayer" parent="." unique_id=1490989591]
+script = ExtResource("10_getsuga")
+
 [node name="LeftArenaWall" type="Sprite2D" parent="." unique_id=151289717]
 z_index = -20
 material = SubResource("ShaderMaterial_environment_blend")
@@ -75,6 +80,10 @@ flip_h = true
 
 [node name="Player" parent="." unique_id=214181562 instance=ExtResource("1_ig7tw")]
 position = Vector2(-837, 512)
+scale = Vector2(1.15, 1.15)
+
+[node name="Opponent" parent="." unique_id=712175481 instance=ExtResource("9_opponent")]
+position = Vector2(-155, 512)
 scale = Vector2(1.15, 1.15)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=639811447]

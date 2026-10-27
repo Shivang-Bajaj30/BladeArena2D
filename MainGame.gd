@@ -45,26 +45,9 @@ func _ready() -> void:
 	_create_combat_hud()
 	_create_banner_ui()
 	_create_pause_ui()
-	
-	# Start Round 1
-	_start_round(1)
+	_create_hud_buttons()
 
-func _process(delta: float) -> void:
-	if not is_round_active or match_ended or get_tree().paused:
-		return
-	
-	time_left = max(0.0, time_left - delta)
-	if timer_lbl:
-		timer_lbl.text = str(int(ceil(time_left)))
-		if time_left <= 10.0:
-			timer_lbl.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
-		else:
-			timer_lbl.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
-	
-	if time_left <= 0.0:
-		_on_round_timer_expired()
-
-func _input(event: InputEvent) -> void:
+func _input(event: InputEvent):
 	if event.is_action_pressed("pause") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
 		toggle_pause()
 
@@ -510,10 +493,43 @@ func toggle_pause() -> void:
 	is_game_paused = !is_game_paused
 	get_tree().paused = is_game_paused
 	pause_canvas.visible = is_game_paused
+	pause_button.text = "▶" if is_game_paused else "❚❚"
 	if is_game_paused:
 		AudioManager.play_hover()
 
-func _create_pause_ui() -> void:
+func _create_hud_buttons():
+	var hud := CanvasLayer.new()
+	hud.layer = 15
+	add_child(hud)
+	
+	# Pause button at top-right
+	var pause_btn := Button.new()
+	pause_btn.text = "❚❚ MENU"
+	pause_btn.size = Vector2(130, 48)
+	pause_btn.position = Vector2(1920 - 160, 24)
+	pause_btn.focus_mode = Control.FOCUS_NONE
+	
+	var style_normal := StyleBoxFlat.new()
+	style_normal.bg_color = Color(0.08, 0.12, 0.20, 0.85)
+	style_normal.border_color = Color(0.25, 0.65, 1.0, 0.7)
+	style_normal.set_border_width_all(2)
+	style_normal.set_corner_radius_all(8)
+	
+	var style_hover := StyleBoxFlat.new()
+	style_hover.bg_color = Color(0.14, 0.22, 0.38, 0.95)
+	style_hover.border_color = Color(0.4, 0.8, 1.0, 0.95)
+	style_hover.set_border_width_all(2)
+	style_hover.set_corner_radius_all(8)
+	
+	pause_btn.add_theme_stylebox_override("normal", style_normal)
+	pause_btn.add_theme_stylebox_override("hover", style_hover)
+	pause_btn.add_theme_stylebox_override("pressed", style_hover)
+	pause_btn.add_theme_font_size_override("font_size", 20)
+	pause_btn.pressed.connect(toggle_pause)
+	pause_btn.mouse_entered.connect(AudioManager.play_hover)
+	hud.add_child(pause_btn)
+
+func _create_pause_ui():
 	pause_canvas = CanvasLayer.new()
 	pause_canvas.layer = 30
 	pause_canvas.visible = false
@@ -523,19 +539,14 @@ func _create_pause_ui() -> void:
 	var backdrop := ColorRect.new()
 	backdrop.color = Color(0.02, 0.03, 0.06, 0.84)
 	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
-	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
+	backdrop.size = Vector2(1920, 1080)
 	pause_canvas.add_child(backdrop)
 	
 	# Centered pause panel exactly in screen center
 	pause_panel = PanelContainer.new()
-	pause_panel.custom_minimum_size = Vector2(480, 500)
+	pause_panel.custom_minimum_size = Vector2(460, 480)
 	pause_panel.set_anchors_preset(Control.PRESET_CENTER)
-	pause_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
-	pause_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
-	pause_panel.offset_left = -240
-	pause_panel.offset_right = 240
-	pause_panel.offset_top = -250
-	pause_panel.offset_bottom = 250
+	pause_panel.position = Vector2(1920/2 - 230, 1080/2 - 240)
 	
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color(0.06, 0.08, 0.14, 0.96)
@@ -549,13 +560,13 @@ func _create_pause_ui() -> void:
 	
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.add_theme_constant_override("separation", 18)
+	vbox.add_theme_constant_override("separation", 20)
 	pause_panel.add_child(vbox)
 	
 	var title := Label.new()
 	title.text = "PAUSED"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 44)
+	title.add_theme_font_size_override("font_size", 42)
 	title.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	title.add_theme_color_override("font_shadow_color", Color(0, 0.8, 1, 0.5))
 	title.add_theme_constant_override("shadow_offset_y", 2)
@@ -586,23 +597,20 @@ func _create_pause_ui() -> void:
 func _create_pause_menu_btn(btn_text: String, accent: Color) -> Button:
 	var btn := Button.new()
 	btn.text = btn_text
-	btn.custom_minimum_size = Vector2(380, 60)
-	btn.add_theme_font_size_override("font_size", 22)
-	btn.focus_mode = Control.FOCUS_NONE
+	btn.custom_minimum_size = Vector2(360, 56)
+	btn.add_theme_font_size_override("font_size", 20)
 	
 	var norm := StyleBoxFlat.new()
 	norm.bg_color = Color(0.10, 0.14, 0.22, 0.92)
 	norm.border_color = accent * 0.75
 	norm.set_border_width_all(2)
-	norm.set_corner_radius_all(8)
+	norm.set_corner_radius_all(10)
 	
 	var hov := StyleBoxFlat.new()
 	hov.bg_color = Color(0.16, 0.24, 0.38, 1.0)
 	hov.border_color = accent
 	hov.set_border_width_all(2)
 	hov.set_corner_radius_all(8)
-	hov.shadow_color = accent * Color(1, 1, 1, 0.3)
-	hov.shadow_size = 12
 	
 	btn.add_theme_stylebox_override("normal", norm)
 	btn.add_theme_stylebox_override("hover", hov)

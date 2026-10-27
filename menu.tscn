@@ -1,50 +1,89 @@
-[gd_scene load_steps=17 format=3 uid="uid://c7m5y1v9p4k2j"]
+[gd_scene format=3 uid="uid://c7m5y1wap4k2j"]
 
-[ext_resource type="Script" path="res://Menu.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://background/cyberpunk_city.jpg" id="2_bg"]
-[ext_resource type="Texture2D" path="res://menu_vignette.png" id="3_vignette"]
-[ext_resource type="Texture2D" path="res://Stick Figure Character Sprites 2D/Sword sprites/sword_Idle_0001.png" id="4_hero"]
-[ext_resource type="Texture2D" path="res://menu_glow.png" id="5_glow"]
+[ext_resource type="Script" uid="uid://1ot1aixclp0j" path="res://Menu.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://b81ad2wyffeg6" path="res://background/cyberpunk_city.jpg" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://ba2dsh8dvsqne" path="res://menu_vignette.png" id="3_vignette"]
+[ext_resource type="Texture2D" uid="uid://ie5a5ooirg4k" path="res://Stick Figure Character Sprites 2D/Sword sprites/sword_Idle_0001.png" id="4_hero"]
+[ext_resource type="Texture2D" uid="uid://wukoht1x4uxp" path="res://menu_glow.png" id="5_glow"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
-bg_color = Color(0.06, 0.09, 0.16, 0.92)
-border_width_left = 3
-border_width_top = 1
-border_width_right = 1
+bg_color = Color(0.055, 0.095, 0.17, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.18, 0.52, 0.82, 0.85)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0, 0, 0, 0.45)
-shadow_size = 6
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
-bg_color = Color(0.12, 0.22, 0.38, 0.98)
-border_width_left = 5
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 2
-border_color = Color(0.0, 0.88, 1, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
-shadow_color = Color(0, 0.8, 1, 0.35)
-shadow_size = 14
+border_color = Color(0.28, 0.6, 0.82, 0.82)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 16
+shadow_color = Color(0, 0.02, 0.07, 0.38)
+shadow_size = 5
+content_margin_left = 18.0
+content_margin_right = 18.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
-bg_color = Color(0.04, 0.14, 0.26, 1)
-border_width_left = 5
-border_width_top = 1
-border_width_right = 1
+bg_color = Color(0.075, 0.23, 0.33, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.0, 1, 0.9, 1)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
+border_color = Color(0.25, 0.94, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 16
+content_margin_left = 18.0
+content_margin_right = 18.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.095, 0.19, 0.3, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.28, 0.86, 1, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 16
+shadow_color = Color(0, 0.55, 0.82, 0.24)
+shadow_size = 9
+content_margin_left = 18.0
+content_margin_right = 18.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arrow_normal"]
+bg_color = Color(0.035, 0.075, 0.13, 0.88)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.34, 0.75, 0.94, 0.85)
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+corner_detail = 20
+shadow_color = Color(0, 0.03, 0.08, 0.5)
+shadow_size = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_arrow_hover"]
+bg_color = Color(0.07, 0.19, 0.27, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.42, 0.94, 1, 1)
+corner_radius_top_left = 42
+corner_radius_top_right = 42
+corner_radius_bottom_right = 42
+corner_radius_bottom_left = 42
+corner_detail = 20
+shadow_color = Color(0, 0.6, 0.85, 0.25)
+shadow_size = 12
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_glass"]
 bg_color = Color(0.04, 0.06, 0.1, 0.88)
@@ -53,11 +92,11 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.18, 0.35, 0.55, 0.65)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-shadow_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 16
 shadow_size = 20
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel_cyber"]
@@ -66,11 +105,12 @@ border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
-border_color = Color(0.0, 0.8, 1, 0.85)
-corner_radius_top_left = 10
-corner_radius_top_right = 10
-corner_radius_bottom_right = 10
-corner_radius_bottom_left = 10
+border_color = Color(0, 0.8, 1, 0.85)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+corner_detail = 16
 shadow_color = Color(0, 0.6, 1, 0.3)
 shadow_size = 18
 
@@ -82,23 +122,24 @@ corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stat_fill"]
-bg_color = Color(0.0, 0.85, 1, 1)
+bg_color = Color(0, 0.85, 1, 1)
 corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_confirm_normal"]
-bg_color = Color(0.0, 0.6, 0.8, 0.9)
+bg_color = Color(0, 0.6, 0.8, 0.9)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.4, 0.9, 1, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 16
 shadow_color = Color(0, 0.8, 1, 0.4)
 shadow_size = 10
 
@@ -109,10 +150,11 @@ border_width_top = 2
 border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.8, 1, 1, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+corner_detail = 16
 shadow_color = Color(0, 0.9, 1, 0.7)
 shadow_size = 16
 
@@ -142,7 +184,7 @@ corner_radius_bottom_left = 8
 shadow_color = Color(0, 0, 0, 0.4)
 shadow_size = 8
 
-[node name="Menu" type="Control"]
+[node name="Menu" type="Control" unique_id=1464621598]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -151,7 +193,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_script")
 
-[node name="BackgroundLayer" type="Control" parent="."]
+[node name="BackgroundLayer" type="Control" parent="." unique_id=680873427]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -160,7 +202,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="BgTexture" type="TextureRect" parent="BackgroundLayer"]
+[node name="BgTexture" type="TextureRect" parent="BackgroundLayer" unique_id=1750717128]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -175,7 +217,7 @@ texture = ExtResource("2_bg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="AtmosphericOverlay" type="ColorRect" parent="BackgroundLayer"]
+[node name="AtmosphericOverlay" type="ColorRect" parent="BackgroundLayer" unique_id=1413185217]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -185,7 +227,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.08, 0.2, 0.4, 0.25)
 
-[node name="DarkVignette" type="ColorRect" parent="BackgroundLayer"]
+[node name="DarkVignette" type="ColorRect" parent="BackgroundLayer" unique_id=182274602]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -195,7 +237,7 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.02, 0.03, 0.06, 0.35)
 
-[node name="Vignette" type="TextureRect" parent="BackgroundLayer"]
+[node name="Vignette" type="TextureRect" parent="BackgroundLayer" unique_id=1422288040]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -207,7 +249,7 @@ texture = ExtResource("3_vignette")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="ParticleContainer" type="Control" parent="BackgroundLayer"]
+[node name="ParticleContainer" type="Control" parent="BackgroundLayer" unique_id=1819799347]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -216,7 +258,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HeroStage" type="Control" parent="BackgroundLayer"]
+[node name="HeroStage" type="Control" parent="BackgroundLayer" unique_id=114977197]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -224,23 +266,21 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 380.0
-offset_top = 0.0
 offset_right = 380.0
-offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HeroGlow" type="Sprite2D" parent="BackgroundLayer/HeroStage"]
+[node name="HeroGlow" type="Sprite2D" parent="BackgroundLayer/HeroStage" unique_id=1585197564]
 modulate = Color(0, 0.85, 1, 0.45)
 scale = Vector2(5.5, 5.5)
 texture = ExtResource("5_glow")
 
-[node name="HeroSprite" type="Sprite2D" parent="BackgroundLayer/HeroStage"]
+[node name="HeroSprite" type="Sprite2D" parent="BackgroundLayer/HeroStage" unique_id=1296640898]
 scale = Vector2(2.8, 2.8)
 texture = ExtResource("4_hero")
 
-[node name="Header" type="Control" parent="."]
+[node name="Header" type="Control" parent="." unique_id=1086640083]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -250,7 +290,7 @@ offset_right = -60.0
 offset_bottom = 100.0
 grow_horizontal = 2
 
-[node name="LogoBadge" type="HBoxContainer" parent="Header"]
+[node name="LogoBadge" type="HBoxContainer" parent="Header" unique_id=320791877]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -261,54 +301,54 @@ offset_bottom = 25.0
 grow_vertical = 2
 theme_override_constants/separation = 12
 
-[node name="GlowDot" type="ColorRect" parent="Header/LogoBadge"]
+[node name="GlowDot" type="ColorRect" parent="Header/LogoBadge" unique_id=763760770]
 custom_minimum_size = Vector2(10, 36)
 layout_mode = 2
 color = Color(0, 0.88, 1, 1)
 
-[node name="VBox" type="VBoxContainer" parent="Header/LogoBadge"]
+[node name="VBox" type="VBoxContainer" parent="Header/LogoBadge" unique_id=1536579798]
 layout_mode = 2
 theme_override_constants/separation = -2
 
-[node name="SubTitle" type="Label" parent="Header/LogoBadge/VBox"]
+[node name="SubTitle" type="Label" parent="Header/LogoBadge/VBox" unique_id=506592708]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 16
 text = "CYBERNETIC SHADOW COMBAT"
 
-[node name="MainTitle" type="Label" parent="Header/LogoBadge/VBox"]
+[node name="MainTitle" type="Label" parent="Header/LogoBadge/VBox" unique_id=140293783]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0.8, 1, 0.45)
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 36
 text = "BLADE ARENA 2D"
 
-[node name="RightControls" type="HBoxContainer" parent="Header"]
+[node name="RightControls" type="HBoxContainer" parent="Header" unique_id=281610254]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -22.0
-offset_bottom = 22.0
+offset_left = -260.0
+offset_top = -29.0
+offset_bottom = 29.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="QuickMusicToggle" type="Button" parent="Header/RightControls"]
-custom_minimum_size = Vector2(160, 42)
+[node name="QuickMusicToggle" type="Button" parent="Header/RightControls" unique_id=48363047]
+custom_minimum_size = Vector2(224, 58)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "🔊 BGM: ON"
 
-[node name="Views" type="Control" parent="."]
+[node name="Views" type="Control" parent="." unique_id=371015330]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -317,7 +357,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HomeView" type="Control" parent="Views"]
+[node name="HomeView" type="Control" parent="Views" unique_id=951269879]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -325,74 +365,72 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="HeroTitleBox" type="VBoxContainer" parent="Views/HomeView"]
+[node name="HeroTitleBox" type="VBoxContainer" parent="Views/HomeView" unique_id=1512914235]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 120.0
-offset_top = -290.0
+offset_top = -260.0
 offset_right = 650.0
-offset_bottom = -160.0
+offset_bottom = -140.0
 grow_vertical = 2
 theme_override_constants/separation = 4
 
-[node name="Tagline" type="Label" parent="Views/HomeView/HeroTitleBox"]
+[node name="Tagline" type="Label" parent="Views/HomeView/HeroTitleBox" unique_id=1891970227]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.88, 1, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 20
 text = "⚔ NEXT-GEN CINEMATIC DUEL"
 
-[node name="Title" type="Label" parent="Views/HomeView/HeroTitleBox"]
+[node name="Title" type="Label" parent="Views/HomeView/HeroTitleBox" unique_id=1618998897]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.8)
 theme_override_constants/shadow_offset_y = 4
-theme_override_font_sizes/font_size = 54
+theme_override_font_sizes/font_size = 62
 text = "ENTER THE ARENA"
 
-[node name="MenuContainer" type="VBoxContainer" parent="Views/HomeView"]
+[node name="MenuContainer" type="VBoxContainer" parent="Views/HomeView" unique_id=945292662]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 120.0
-offset_top = -140.0
-offset_right = 540.0
-offset_bottom = 370.0
+offset_top = -100.0
+offset_right = 520.0
+offset_bottom = 340.0
 grow_vertical = 2
 theme_override_constants/separation = 12
 
 [node name="PlayBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(420, 68)
+custom_minimum_size = Vector2(380, 66)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "▶  ENTER ARENA"
 alignment = 0
 
 [node name="CharacterBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(420, 58)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 27
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "🥋  SELECT WARRIOR"
 alignment = 0
 
 [node name="BackgroundBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(420, 58)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
 theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 text = "⛩  SELECT ARENA"
 alignment = 0
 
@@ -408,84 +446,128 @@ text = "⚔  STATS & RECORDS"
 alignment = 0
 
 [node name="GuideBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(420, 58)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 27
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "📜  HOW TO PLAY & COMBOS"
 alignment = 0
 
 [node name="SettingsBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(420, 58)
+custom_minimum_size = Vector2(380, 58)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 27
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "⚙  SETTINGS"
 alignment = 0
 
 [node name="ExitBtn" type="Button" parent="Views/HomeView/MenuContainer"]
-custom_minimum_size = Vector2(420, 52)
+custom_minimum_size = Vector2(380, 50)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "✕  EXIT GAME"
 alignment = 0
 
-[node name="HeroBadge" type="PanelContainer" parent="Views/HomeView"]
+[node name="PreviousWarrior" type="Button" parent="Views/HomeView"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 180.0
-offset_top = 265.0
-offset_right = 580.0
-offset_bottom = 380.0
+offset_left = -72.0
+offset_top = -45.0
+offset_right = 18.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.9, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_hover")
+text = "❮"
+tooltip_text = "Previous warrior"
+
+[node name="NextWarrior" type="Button" parent="Views/HomeView"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 588.0
+offset_top = -45.0
+offset_right = 678.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0.9, 0.98, 1, 1)
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_arrow_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_arrow_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_arrow_hover")
+text = "❯"
+tooltip_text = "Next warrior"
+
+[node name="HeroBadge" type="PanelContainer" parent="Views/HomeView" unique_id=745720013]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 175.0
+offset_top = 252.0
+offset_right = 585.0
+offset_bottom = 398.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
 
-[node name="VBox" type="VBoxContainer" parent="Views/HomeView/HeroBadge"]
+[node name="VBox" type="VBoxContainer" parent="Views/HomeView/HeroBadge" unique_id=1117940114]
 layout_mode = 2
+theme_override_constants/separation = 8
 alignment = 1
-theme_override_constants/separation = 6
 
-[node name="BadgeWarriorName" type="Label" parent="Views/HomeView/HeroBadge/VBox"]
+[node name="BadgeWarriorName" type="Label" parent="Views/HomeView/HeroBadge/VBox" unique_id=98409974]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 27
 text = "KAGE • BLADE MASTER"
 horizontal_alignment = 1
 
-[node name="BadgeWeapon" type="Label" parent="Views/HomeView/HeroBadge/VBox"]
+[node name="BadgeWeapon" type="Label" parent="Views/HomeView/HeroBadge/VBox" unique_id=1437242584]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 20
 text = "DUAL KATANA & MURASAME"
 horizontal_alignment = 1
 
-[node name="TestStrikeBtn" type="Button" parent="Views/HomeView/HeroBadge/VBox"]
-custom_minimum_size = Vector2(220, 36)
+[node name="TestStrikeBtn" type="Button" parent="Views/HomeView/HeroBadge/VBox" unique_id=1925533873]
+custom_minimum_size = Vector2(350, 66)
 layout_mode = 2
 size_flags_horizontal = 4
 focus_mode = 0
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 26
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "⚡ TEST COMBAT STRIKE"
 
-[node name="CharacterSelectView" type="Control" parent="Views"]
+[node name="CharacterSelectView" type="Control" parent="Views" unique_id=1360583991]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -494,31 +576,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackBtn" type="Button" parent="Views/CharacterSelectView"]
-custom_minimum_size = Vector2(160, 48)
+[node name="BackBtn" type="Button" parent="Views/CharacterSelectView" unique_id=247766822]
+custom_minimum_size = Vector2(216, 68)
 layout_mode = 0
 offset_left = 60.0
-offset_top = 115.0
-offset_right = 220.0
-offset_bottom = 163.0
+offset_top = 110.0
+offset_right = 276.0
+offset_bottom = 178.0
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "◀ BACK"
 
-[node name="HeaderLabel" type="Label" parent="Views/CharacterSelectView"]
+[node name="HeaderLabel" type="Label" parent="Views/CharacterSelectView" unique_id=993818006]
 layout_mode = 0
-offset_left = 240.0
-offset_top = 118.0
-offset_right = 650.0
-offset_bottom = 162.0
+offset_left = 280.0
+offset_top = 116.0
+offset_right = 940.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "CHOOSE YOUR WARRIOR"
 
-[node name="CenterArea" type="Control" parent="Views/CharacterSelectView"]
+[node name="CenterArea" type="Control" parent="Views/CharacterSelectView" unique_id=392064322]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -529,22 +611,22 @@ offset_right = 640.0
 offset_bottom = 360.0
 grow_vertical = 2
 
-[node name="CharacterCards" type="HBoxContainer" parent="Views/CharacterSelectView/CenterArea"]
+[node name="CharacterCards" type="HBoxContainer" parent="Views/CharacterSelectView/CenterArea" unique_id=922641408]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -220.0
-offset_right = 280.0
-offset_bottom = 220.0
+offset_left = -332.0
+offset_top = -235.0
+offset_right = 332.0
+offset_bottom = 235.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 24
 
-[node name="PreviewBox" type="Panel" parent="Views/CharacterSelectView"]
+[node name="PreviewBox" type="Panel" parent="Views/CharacterSelectView" unique_id=1732431475]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -552,14 +634,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -230.0
-offset_top = -300.0
+offset_top = -340.0
 offset_right = 230.0
-offset_bottom = 360.0
+offset_bottom = 380.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
 
-[node name="BigPortrait" type="TextureRect" parent="Views/CharacterSelectView/PreviewBox"]
+[node name="BigPortrait" type="TextureRect" parent="Views/CharacterSelectView/PreviewBox" unique_id=2007152090]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -569,7 +651,7 @@ grow_vertical = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DetailsPanel" type="Panel" parent="Views/CharacterSelectView"]
+[node name="DetailsPanel" type="Panel" parent="Views/CharacterSelectView" unique_id=939785608]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -577,14 +659,14 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -660.0
-offset_top = -300.0
+offset_top = -340.0
 offset_right = -60.0
-offset_bottom = 360.0
+offset_bottom = 380.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_cyber")
 
-[node name="VBox" type="VBoxContainer" parent="Views/CharacterSelectView/DetailsPanel"]
+[node name="VBox" type="VBoxContainer" parent="Views/CharacterSelectView/DetailsPanel" unique_id=2134101138]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -595,132 +677,132 @@ offset_right = -36.0
 offset_bottom = -36.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 10
 
-[node name="CharRole" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="CharRole" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=1104584615]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "SWORD VANGUARD"
 
-[node name="CharName" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="CharName" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=1455224010]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "KAGE • BLADE MASTER"
 
-[node name="CharWeapon" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="CharWeapon" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=1409091197]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "WEAPON: Dual Katana & Murasame"
 
-[node name="CharDesc" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
-custom_minimum_size = Vector2(0, 70)
+[node name="CharDesc" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=2079737386]
+custom_minimum_size = Vector2(0, 92)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.65, 0.72, 0.82, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Lethal blade warrior executing lightning-fast iaido slashes and devastating aerial descent strikes."
 autowrap_mode = 3
 
-[node name="Divider" type="ColorRect" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="Divider" type="ColorRect" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=1770517386]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.18, 0.3, 0.45, 0.6)
 
-[node name="StatsTitle" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="StatsTitle" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=509349733]
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "COMBAT ATTRIBUTES"
 
-[node name="StatsGrid" type="VBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="StatsGrid" type="VBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=1582132798]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
-[node name="DmgRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+[node name="DmgRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=2076652720]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/DmgRow"]
-custom_minimum_size = Vector2(90, 0)
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/DmgRow" unique_id=839248605]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 text = "DAMAGE"
 
-[node name="DamageBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
-custom_minimum_size = Vector2(0, 14)
+[node name="DamageBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=976704959]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
 value = 92.0
 show_percentage = false
 
-[node name="SpdRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+[node name="SpdRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=2124159317]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/SpdRow"]
-custom_minimum_size = Vector2(90, 0)
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/SpdRow" unique_id=1061501938]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 text = "SPEED"
 
-[node name="SpeedBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
-custom_minimum_size = Vector2(0, 14)
+[node name="SpeedBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=783278107]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
 value = 85.0
 show_percentage = false
 
-[node name="RngRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+[node name="RngRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=1190629186]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/RngRow"]
-custom_minimum_size = Vector2(90, 0)
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/RngRow" unique_id=1001567893]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 text = "RANGE"
 
-[node name="RangeBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
-custom_minimum_size = Vector2(0, 14)
+[node name="RangeBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=2068564937]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
 value = 78.0
 show_percentage = false
 
-[node name="DefRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
+[node name="DefRow" type="HBoxContainer" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=1257646082]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/DefRow"]
-custom_minimum_size = Vector2(90, 0)
+[node name="Label" type="Label" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid/DefRow" unique_id=1207996120]
+custom_minimum_size = Vector2(110, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 text = "DEFENSE"
 
-[node name="DefenseBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid"]
-custom_minimum_size = Vector2(0, 14)
+[node name="DefenseBar" type="ProgressBar" parent="Views/CharacterSelectView/DetailsPanel/VBox/StatsGrid" unique_id=104179872]
+custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_stat_bg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_stat_fill")
 value = 74.0
 show_percentage = false
 
-[node name="Spacer" type="Control" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
+[node name="Spacer" type="Control" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=2036595493]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ConfirmCharBtn" type="Button" parent="Views/CharacterSelectView/DetailsPanel/VBox"]
-custom_minimum_size = Vector2(0, 56)
+[node name="ConfirmCharBtn" type="Button" parent="Views/CharacterSelectView/DetailsPanel/VBox" unique_id=1798666493]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = SubResource("StyleBoxFlat_confirm_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_confirm_disabled")
 text = "SELECT WARRIOR"
 
-[node name="BackgroundSelectView" type="Control" parent="Views"]
+[node name="BackgroundSelectView" type="Control" parent="Views" unique_id=1139049167]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -729,31 +811,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackBtn" type="Button" parent="Views/BackgroundSelectView"]
-custom_minimum_size = Vector2(160, 48)
+[node name="BackBtn" type="Button" parent="Views/BackgroundSelectView" unique_id=1937674609]
+custom_minimum_size = Vector2(216, 68)
 layout_mode = 0
 offset_left = 60.0
-offset_top = 115.0
-offset_right = 220.0
-offset_bottom = 163.0
+offset_top = 110.0
+offset_right = 276.0
+offset_bottom = 178.0
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "◀ BACK"
 
-[node name="HeaderLabel" type="Label" parent="Views/BackgroundSelectView"]
+[node name="HeaderLabel" type="Label" parent="Views/BackgroundSelectView" unique_id=711924913]
 layout_mode = 0
-offset_left = 240.0
-offset_top = 118.0
-offset_right = 650.0
-offset_bottom = 162.0
+offset_left = 280.0
+offset_top = 116.0
+offset_right = 940.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "CHOOSE ENVIRONMENT"
 
-[node name="Content" type="HBoxContainer" parent="Views/BackgroundSelectView"]
+[node name="Content" type="HBoxContainer" parent="Views/BackgroundSelectView" unique_id=13758676]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -766,19 +848,19 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 40
 
-[node name="Grid" type="GridContainer" parent="Views/BackgroundSelectView/Content"]
-custom_minimum_size = Vector2(760, 0)
+[node name="Grid" type="GridContainer" parent="Views/BackgroundSelectView/Content" unique_id=1468243457]
+custom_minimum_size = Vector2(910, 0)
 layout_mode = 2
 theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="PreviewPanel" type="Panel" parent="Views/BackgroundSelectView/Content"]
+[node name="PreviewPanel" type="Panel" parent="Views/BackgroundSelectView/Content" unique_id=2018690169]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_cyber")
 
-[node name="BigPreview" type="TextureRect" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+[node name="BigPreview" type="TextureRect" parent="Views/BackgroundSelectView/Content/PreviewPanel" unique_id=1669213559]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -790,68 +872,68 @@ grow_horizontal = 2
 expand_mode = 1
 stretch_mode = 6
 
-[node name="BgTag" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+[node name="BgTag" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel" unique_id=156753034]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 28.0
-offset_top = 460.0
+offset_top = 458.0
 offset_right = -28.0
-offset_bottom = 485.0
+offset_bottom = 492.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 14
+theme_override_font_sizes/font_size = 20
 text = "CYBERPUNK NEON"
 
-[node name="BgName" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+[node name="BgName" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel" unique_id=2054314563]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 28.0
 offset_top = 488.0
-offset_right = -28.0
+offset_top = 496.0
 offset_bottom = 528.0
-grow_horizontal = 2
+offset_bottom = 550.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 36
 text = "NEO-TOKYO 2099"
 
-[node name="BgDesc" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
+[node name="BgDesc" type="Label" parent="Views/BackgroundSelectView/Content/PreviewPanel" unique_id=1390790464]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 28.0
-offset_top = 536.0
+offset_top = 558.0
 offset_right = -28.0
-offset_bottom = 610.0
+offset_bottom = 640.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.7, 0.76, 0.85, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Rain-slicked skyscrapers drenched in vibrant cyan and magenta holographic glow."
 autowrap_mode = 3
 
-[node name="ConfirmBgBtn" type="Button" parent="Views/BackgroundSelectView/Content/PreviewPanel"]
-custom_minimum_size = Vector2(0, 56)
+[node name="ConfirmBgBtn" type="Button" parent="Views/BackgroundSelectView/Content/PreviewPanel" unique_id=1688452779]
+custom_minimum_size = Vector2(0, 84)
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 28.0
-offset_top = -80.0
+offset_top = -104.0
 offset_right = -28.0
-offset_bottom = -24.0
+offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 focus_mode = 0
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 29
 theme_override_styles/normal = SubResource("StyleBoxFlat_confirm_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_hover")
+theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_confirm_disabled")
 text = "EQUIP ENVIRONMENT"
 
-[node name="HowToPlayView" type="Control" parent="Views"]
+[node name="HowToPlayView" type="Control" parent="Views" unique_id=545671662]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -860,31 +942,31 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackBtn" type="Button" parent="Views/HowToPlayView"]
-custom_minimum_size = Vector2(160, 48)
+[node name="BackBtn" type="Button" parent="Views/HowToPlayView" unique_id=757069721]
+custom_minimum_size = Vector2(216, 68)
 layout_mode = 0
 offset_left = 60.0
-offset_top = 115.0
-offset_right = 220.0
-offset_bottom = 163.0
+offset_top = 110.0
+offset_right = 276.0
+offset_bottom = 178.0
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "◀ BACK"
 
-[node name="HeaderLabel" type="Label" parent="Views/HowToPlayView"]
+[node name="HeaderLabel" type="Label" parent="Views/HowToPlayView" unique_id=986192200]
 layout_mode = 0
-offset_left = 240.0
-offset_top = 118.0
-offset_right = 820.0
-offset_bottom = 162.0
+offset_left = 280.0
+offset_top = 116.0
+offset_right = 1200.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "COMBAT DIRECTIVE & MOVE LIST"
 
-[node name="Content" type="HBoxContainer" parent="Views/HowToPlayView"]
+[node name="Content" type="HBoxContainer" parent="Views/HowToPlayView" unique_id=628069306]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -895,14 +977,14 @@ offset_right = -60.0
 offset_bottom = -60.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 28
+theme_override_constants/separation = 32
 
-[node name="KeyboardCard" type="Panel" parent="Views/HowToPlayView/Content"]
+[node name="KeyboardCard" type="Panel" parent="Views/HowToPlayView/Content" unique_id=2067457375]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
 
-[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard"]
+[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard" unique_id=253828307]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -913,137 +995,137 @@ offset_right = -24.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 18
 
-[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=1895112295]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 28
 text = "⌨ KEYBOARD CONTROLS"
 
-[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=459921164]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.18, 0.3, 0.45, 0.6)
 
-[node name="Row1" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row1" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=1961609762]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row1"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row1" unique_id=2134435441]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[A] / [D]"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row1"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row1" unique_id=324141478]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Move Left / Right"
 
-[node name="Row2" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row2" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=1593411768]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row2"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row2" unique_id=168712268]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[SHIFT] + Move"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row2"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row2" unique_id=980706923]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "High-Velocity Sprint"
 
-[node name="Row3" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row3" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=1626355167]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row3"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row3" unique_id=409529536]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[SPACE]"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row3"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row3" unique_id=1425138021]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Jump / Wall Spring"
 
-[node name="Row4" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row4" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=2080737652]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row4"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row4" unique_id=768930958]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[S] / [DOWN]"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row4"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row4" unique_id=819217383]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Ground Slide (Low Profile)"
 
-[node name="Row5" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row5" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=269832730]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row5"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row5" unique_id=923422172]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[F] / [DODGE]"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row5"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row5" unique_id=813822930]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Shadow Dash / Air Dash"
 
-[node name="Row6" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row6" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=815979285]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row6"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row6" unique_id=1235617282]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[LEFT CLICK]"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row6"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row6" unique_id=844925233]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Strike / 3-Hit Combo Chain"
 
-[node name="Row7" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox"]
+[node name="Row7" type="HBoxContainer" parent="Views/HowToPlayView/Content/KeyboardCard/VBox" unique_id=320616182]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row7"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row7" unique_id=1552810553]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "[ESC]"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row7"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/KeyboardCard/VBox/Row7" unique_id=1830003408]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Pause Tactical Match"
 
-[node name="TouchCard" type="Panel" parent="Views/HowToPlayView/Content"]
+[node name="TouchCard" type="Panel" parent="Views/HowToPlayView/Content" unique_id=2059662391]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
 
-[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/TouchCard"]
+[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/TouchCard" unique_id=451520283]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1054,121 +1136,121 @@ offset_right = -24.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 18
 
-[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=383151745]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 28
 text = "📱 MOBILE / TOUCH CONTROLS"
 
-[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=1622519073]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.18, 0.3, 0.45, 0.6)
 
-[node name="Row1" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Row1" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=691206505]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row1"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row1" unique_id=535592239]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Virtual Joystick"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row1"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row1" unique_id=205167498]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Fluid Walking Navigation"
 
-[node name="Row2" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Row2" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=1809822884]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row2"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row2" unique_id=614637558]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Outer Edge Push"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row2"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row2" unique_id=340387600]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Engage Ninja Sprint"
 
-[node name="Row3" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Row3" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=839868502]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row3"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row3" unique_id=148466631]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Punch Button"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row3"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row3" unique_id=572221067]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Strike / Combo Chains"
 
-[node name="Row4" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Row4" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=1719017637]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row4"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row4" unique_id=100219222]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Jump Button"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row4"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row4" unique_id=917486027]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Ascend / Wall Rebound"
 
-[node name="Row5" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Row5" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=1094760847]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row5"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row5" unique_id=1520016245]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Dash Button"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row5"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row5" unique_id=117376222]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Ground / Air Evasion"
 
-[node name="Row6" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox"]
+[node name="Row6" type="HBoxContainer" parent="Views/HowToPlayView/Content/TouchCard/VBox" unique_id=1709844394]
 layout_mode = 2
 
-[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row6"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Key" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row6" unique_id=1130631075]
+custom_minimum_size = Vector2(190, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Slide Button"
 
-[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row6"]
+[node name="Desc" type="Label" parent="Views/HowToPlayView/Content/TouchCard/VBox/Row6" unique_id=1682562349]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 0.8, 0.9, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "Tactical Low Slide"
 
-[node name="CombosCard" type="Panel" parent="Views/HowToPlayView/Content"]
+[node name="CombosCard" type="Panel" parent="Views/HowToPlayView/Content" unique_id=1602169797]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_cyber")
 
-[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/CombosCard"]
+[node name="VBox" type="VBoxContainer" parent="Views/HowToPlayView/Content/CombosCard" unique_id=995462973]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1179,72 +1261,72 @@ offset_right = -24.0
 offset_bottom = -24.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 12
+theme_override_constants/separation = 16
 
-[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="CardTitle" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1741373445]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 28
 text = "⚡ SPECIAL COMBOS & SECRETS"
 
-[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Divider" type="ColorRect" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1467783990]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.18, 0.3, 0.45, 0.6)
 
-[node name="Combo1Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo1Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=833977300]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "1. IAIDO SKY SLAM (1250 px/s)"
 
-[node name="Combo1Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo1Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=482136761]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 19
 text = "Jump airborne -> Double-tap Attack. Warrior plunges down like lightning delivering ground shockwave!"
 autowrap_mode = 3
 
-[node name="Combo2Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo2Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1283875673]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "2. SLIDE SLICER INITIATION"
 
-[node name="Combo2Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo2Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1161322832]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 19
 text = "Sprint forward -> Press Slide -> Chain into Attack. Duck under high strikes while slicing!"
 autowrap_mode = 3
 
-[node name="Combo3Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo3Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1376194117]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "3. 3-HIT HIT-STOP FINISHER"
 
-[node name="Combo3Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo3Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=2090166621]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 19
 text = "Attack x3 Chain. The 3rd strike hits with 25 DMG, 350 knockback force, and a freeze-frame hit-stop!"
 autowrap_mode = 3
 
-[node name="Combo4Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo4Title" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1767835481]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.85, 0.4, 1)
-theme_override_font_sizes/font_size = 15
+theme_override_font_sizes/font_size = 21
 text = "4. AERIAL DASH EVASION"
 
-[node name="Combo4Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox"]
+[node name="Combo4Desc" type="Label" parent="Views/HowToPlayView/Content/CombosCard/VBox" unique_id=1511975434]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.75, 0.82, 0.9, 1)
-theme_override_font_sizes/font_size = 13
+theme_override_font_sizes/font_size = 19
 text = "Jump -> Press Dash mid-air to phase horizontally past incoming threats."
 autowrap_mode = 3
 
-[node name="SettingsView" type="Control" parent="Views"]
+[node name="SettingsView" type="Control" parent="Views" unique_id=803418728]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -1253,46 +1335,46 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BackBtn" type="Button" parent="Views/SettingsView"]
-custom_minimum_size = Vector2(160, 48)
+[node name="BackBtn" type="Button" parent="Views/SettingsView" unique_id=1967916372]
+custom_minimum_size = Vector2(216, 68)
 layout_mode = 0
 offset_left = 60.0
-offset_top = 115.0
-offset_right = 220.0
-offset_bottom = 163.0
+offset_top = 110.0
+offset_right = 276.0
+offset_bottom = 178.0
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 25
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "◀ BACK"
 
-[node name="HeaderLabel" type="Label" parent="Views/SettingsView"]
+[node name="HeaderLabel" type="Label" parent="Views/SettingsView" unique_id=1243362492]
 layout_mode = 0
-offset_left = 240.0
-offset_top = 118.0
-offset_right = 650.0
-offset_bottom = 162.0
+offset_left = 280.0
+offset_top = 116.0
+offset_right = 940.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 40
 text = "SYSTEM SETTINGS"
 
-[node name="Panel" type="Panel" parent="Views/SettingsView"]
+[node name="Panel" type="Panel" parent="Views/SettingsView" unique_id=1907528237]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = -260.0
-offset_right = 400.0
-offset_bottom = 320.0
+offset_left = -460.0
+offset_top = -285.0
+offset_right = 460.0
+offset_bottom = 345.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel_glass")
 
-[node name="VBox" type="VBoxContainer" parent="Views/SettingsView/Panel"]
+[node name="VBox" type="VBoxContainer" parent="Views/SettingsView/Panel" unique_id=9708291]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -1303,106 +1385,108 @@ offset_right = -40.0
 offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 24
+theme_override_constants/separation = 26
 
-[node name="AudioHeader" type="Label" parent="Views/SettingsView/Panel/VBox"]
+[node name="AudioHeader" type="Label" parent="Views/SettingsView/Panel/VBox" unique_id=630837700]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 27
 text = "AUDIO CONFIGURATION"
 
-[node name="AudioSection" type="VBoxContainer" parent="Views/SettingsView/Panel/VBox"]
+[node name="AudioSection" type="VBoxContainer" parent="Views/SettingsView/Panel/VBox" unique_id=1152297804]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 18
 
-[node name="MusicRow" type="HBoxContainer" parent="Views/SettingsView/Panel/VBox/AudioSection"]
+[node name="MusicRow" type="HBoxContainer" parent="Views/SettingsView/Panel/VBox/AudioSection" unique_id=546124465]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Label" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow" unique_id=1426148216]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "Background Music"
 
-[node name="MusicSlider" type="HSlider" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
-custom_minimum_size = Vector2(300, 24)
+[node name="MusicSlider" type="HSlider" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow" unique_id=1050698831]
+custom_minimum_size = Vector2(380, 44)
 layout_mode = 2
 size_flags_vertical = 4
 value = 85.0
 
-[node name="MusicValue" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
-custom_minimum_size = Vector2(60, 0)
+[node name="MusicValue" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow" unique_id=208004165]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "85%"
 
-[node name="MusicToggle" type="Button" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow"]
-custom_minimum_size = Vector2(80, 36)
+[node name="MusicToggle" type="Button" parent="Views/SettingsView/Panel/VBox/AudioSection/MusicRow" unique_id=1521109187]
+custom_minimum_size = Vector2(108, 56)
 layout_mode = 2
 focus_mode = 0
+theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "ON"
 
-[node name="SfxRow" type="HBoxContainer" parent="Views/SettingsView/Panel/VBox/AudioSection"]
+[node name="SfxRow" type="HBoxContainer" parent="Views/SettingsView/Panel/VBox/AudioSection" unique_id=1298647543]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
-custom_minimum_size = Vector2(160, 0)
+[node name="Label" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow" unique_id=1280624415]
+custom_minimum_size = Vector2(170, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 22
 text = "Sound Effects (SFX)"
 
-[node name="SfxSlider" type="HSlider" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
-custom_minimum_size = Vector2(300, 24)
+[node name="SfxSlider" type="HSlider" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow" unique_id=717918191]
+custom_minimum_size = Vector2(380, 44)
 layout_mode = 2
 size_flags_vertical = 4
 value = 90.0
 
-[node name="SfxValue" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
-custom_minimum_size = Vector2(60, 0)
+[node name="SfxValue" type="Label" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow" unique_id=1789120895]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "90%"
 
-[node name="SfxToggle" type="Button" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow"]
-custom_minimum_size = Vector2(80, 36)
+[node name="SfxToggle" type="Button" parent="Views/SettingsView/Panel/VBox/AudioSection/SfxRow" unique_id=1771768586]
+custom_minimum_size = Vector2(108, 56)
 layout_mode = 2
 focus_mode = 0
+theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
-theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 text = "ON"
 
-[node name="Divider" type="ColorRect" parent="Views/SettingsView/Panel/VBox"]
+[node name="Divider" type="ColorRect" parent="Views/SettingsView/Panel/VBox" unique_id=2027881119]
 custom_minimum_size = Vector2(0, 1)
 layout_mode = 2
 color = Color(0.18, 0.3, 0.45, 0.6)
 
-[node name="GraphicsHeader" type="Label" parent="Views/SettingsView/Panel/VBox"]
+[node name="GraphicsHeader" type="Label" parent="Views/SettingsView/Panel/VBox" unique_id=822113854]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0.85, 1, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 27
 text = "GRAPHICS & CINEMATIC EFFECTS"
 
-[node name="GraphicsSection" type="VBoxContainer" parent="Views/SettingsView/Panel/VBox"]
+[node name="GraphicsSection" type="VBoxContainer" parent="Views/SettingsView/Panel/VBox" unique_id=277951900]
 layout_mode = 2
-theme_override_constants/separation = 14
+theme_override_constants/separation = 16
 
-[node name="BloomCheck" type="CheckBox" parent="Views/SettingsView/Panel/VBox/GraphicsSection"]
+[node name="BloomCheck" type="CheckBox" parent="Views/SettingsView/Panel/VBox/GraphicsSection" unique_id=417357074]
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 button_pressed = true
 text = "Atmospheric Bloom & Rim Lighting"
 
-[node name="ParticlesCheck" type="CheckBox" parent="Views/SettingsView/Panel/VBox/GraphicsSection"]
+[node name="ParticlesCheck" type="CheckBox" parent="Views/SettingsView/Panel/VBox/GraphicsSection" unique_id=301985631]
 layout_mode = 2
 focus_mode = 0
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 23
 button_pressed = true
 text = "Cinematic Ambient Embers & Particle Fog"
 
@@ -1687,7 +1771,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_confirm_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_confirm_normal")
 text = "✓  BACK TO HOME"
 
-[node name="IntroOverlay" type="ColorRect" parent="."]
+[node name="IntroOverlay" type="ColorRect" parent="." unique_id=1427503833]
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -1699,7 +1783,8 @@ mouse_filter = 2
 color = Color(0.01, 0.02, 0.04, 1)
 
 [connection signal="pressed" from="Views/HomeView/MenuContainer/PlayBtn" to="." method="_on_play_btn_pressed"]
-[connection signal="pressed" from="Views/HomeView/MenuContainer/CharacterBtn" to="." method="_on_character_btn_pressed"]
+[connection signal="pressed" from="Views/HomeView/PreviousWarrior" to="." method="_on_previous_warrior_pressed"]
+[connection signal="pressed" from="Views/HomeView/NextWarrior" to="." method="_on_next_warrior_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/BackgroundBtn" to="." method="_on_background_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/RecordsBtn" to="." method="_on_records_btn_pressed"]
 [connection signal="pressed" from="Views/HomeView/MenuContainer/GuideBtn" to="." method="_on_guide_btn_pressed"]

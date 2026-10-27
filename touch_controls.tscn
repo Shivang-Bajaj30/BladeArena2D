@@ -9,8 +9,19 @@
 [ext_resource type="Texture2D" uid="uid://dlji7bkhhjt2u" path="res://dash.png" id="7_dash_icon"]
 [ext_resource type="Texture2D" uid="uid://b0go0r5tt6cwy" path="res://jump_icon.png" id="8_jump_icon"]
 [ext_resource type="Texture2D" uid="uid://dw7ju0kr806vk" path="res://slide_icon.png" id="9_slide_icon"]
+[ext_resource type="Script" uid="uid://b216n1mthk7lf" path="res://BattleHUD.gd" id="11_battle_hud"]
 
 [node name="TouchControls" type="CanvasLayer" unique_id=1925361234]
+
+[node name="BattleHUD" type="Control" parent="." unique_id=1233048624]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("11_battle_hud")
 
 [node name="Joystick" type="TouchScreenButton" parent="." unique_id=510015086]
 position = Vector2(300, 790)

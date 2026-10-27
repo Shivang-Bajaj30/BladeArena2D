@@ -104,10 +104,17 @@ var particle_timer: float = 0.0
 # Camera/Parallax
 var mouse_parallax: Vector2 = Vector2.ZERO
 var target_parallax: Vector2 = Vector2.ZERO
+var audio_save_timer: Timer
+var button_tweens: Dictionary = {}
+# Maps a volume slider to the touch index currently dragging it. The project
+# keeps "Emulate Mouse From Touch" off, so HSlider needs the touch events fed
+# to it manually (see _on_volume_slider_gui_input).
+var volume_slider_touches: Dictionary = {}
 
 func _ready():
 	# Seamless audio start without restarting if already playing
 	AudioManager.play_menu_music(1.2)
+	_setup_settings_view()
 	
 	# Setup Animated Sprite for Hero Stage
 	_setup_hero_stage()
@@ -121,7 +128,6 @@ func _ready():
 	
 	_setup_character_selection_view()
 	_setup_background_selection_view()
-	_setup_settings_view()
 	_setup_button_effects()
 	_setup_floating_particles()
 	
@@ -150,7 +156,7 @@ func _update_parallax(delta: float):
 	if bg_texture_rect:
 		bg_texture_rect.position = Vector2(-20, -15) - mouse_parallax * 0.7
 	if hero_stage:
-		hero_stage.position = Vector2(1340, 480) + mouse_parallax * 1.2
+		hero_stage.position = get_viewport_rect().size * 0.5 + Vector2(380, -60) + mouse_parallax * 1.2
 
 var breath_time: float = 0.0
 func _update_hero_stage_breathing(delta: float):
@@ -296,7 +302,7 @@ func _setup_background_selection_view():
 	for id in all_ids:
 		var data = GameState.get_background_data(id)
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(240, 160)
+		card.custom_minimum_size = Vector2(290, 200)
 		card.focus_mode = Control.FOCUS_NONE
 		
 		# Thumbnail
@@ -320,10 +326,10 @@ func _setup_background_selection_view():
 		var lbl := Label.new()
 		lbl.text = data["name"]
 		lbl.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		lbl.offset_top = -42
+		lbl.offset_top = -52
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 14)
+		lbl.add_theme_font_size_override("font_size", 20)
 		lbl.add_theme_color_override("font_color", Color(1, 1, 1))
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(lbl)
@@ -455,7 +461,7 @@ func _setup_character_selection_view():
 	for char_id in all_chars:
 		var data = GameState.get_character_data(char_id)
 		var card := Button.new()
-		card.custom_minimum_size = Vector2(260, 420)
+		card.custom_minimum_size = Vector2(320, 470)
 		card.focus_mode = Control.FOCUS_NONE
 		
 		# Portrait image
@@ -467,13 +473,13 @@ func _setup_character_selection_view():
 		if ResourceLoader.exists(data["preview_texture"]):
 			port.texture = load(data["preview_texture"])
 		port.scale = Vector2(1.2, 1.2)
-		port.pivot_offset = Vector2(130, 210)
+		port.pivot_offset = Vector2(160, 235)
 		card.add_child(port)
 		
 		# Dark bottom gradient for legible name
 		var grad := ColorRect.new()
 		grad.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		grad.offset_top = -120
+		grad.offset_top = -132
 		grad.color = Color(0.02, 0.04, 0.08, 0.85)
 		grad.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(grad)
@@ -481,19 +487,19 @@ func _setup_character_selection_view():
 		var name_label := Label.new()
 		name_label.text = data["name"]
 		name_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		name_label.offset_top = -80
-		name_label.offset_bottom = -40
+		name_label.offset_top = -88
+		name_label.offset_bottom = -44
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_label.add_theme_font_size_override("font_size", 16)
+		name_label.add_theme_font_size_override("font_size", 22)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(name_label)
 		
 		var role_label := Label.new()
 		role_label.text = data["role"]
 		role_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		role_label.offset_top = -40
+		role_label.offset_top = -46
 		role_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		role_label.add_theme_font_size_override("font_size", 13)
+		role_label.add_theme_font_size_override("font_size", 19)
 		role_label.add_theme_color_override("font_color", Color(0.0, 0.8, 1.0) if char_id == "blade_master" else Color(1.0, 0.5, 0.2))
 		role_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(role_label)
@@ -555,51 +561,138 @@ func _on_confirm_char_pressed():
 # 5. SETTINGS
 # ------------------------------------------------------------------------------
 func _setup_settings_view():
+	audio_save_timer = Timer.new()
+	audio_save_timer.one_shot = true
+	audio_save_timer.wait_time = 0.25
+	add_child(audio_save_timer)
+	audio_save_timer.timeout.connect(GameState.save_settings)
+	_style_volume_slider(music_slider)
+	_style_volume_slider(sfx_slider)
 	music_slider.value_changed.connect(_on_music_slider_changed)
 	sfx_slider.value_changed.connect(_on_sfx_slider_changed)
+	music_slider.drag_ended.connect(_on_audio_slider_drag_ended)
+	sfx_slider.drag_ended.connect(_on_sfx_slider_drag_ended)
+	# Touch screens never drive HSlider on their own while touch-to-mouse
+	# emulation is disabled, so translate the raw touch gestures instead.
+	music_slider.gui_input.connect(_on_volume_slider_gui_input.bind(music_slider))
+	sfx_slider.gui_input.connect(_on_volume_slider_gui_input.bind(sfx_slider))
 	music_toggle_btn.pressed.connect(_on_music_toggle_pressed)
 	sfx_toggle_btn.pressed.connect(_on_sfx_toggle_pressed)
 	header_music_toggle.pressed.connect(_on_music_toggle_pressed)
 	bloom_check.toggled.connect(_on_bloom_toggled)
 	particles_check.toggled.connect(_on_particles_toggled)
+	_sync_settings_controls()
+
+func _style_volume_slider(slider: HSlider) -> void:
+	# Thicker neon track and a glow knob so the slider reads clearly on phones.
+	var track := StyleBoxFlat.new()
+	track.bg_color = Color(0.035, 0.075, 0.13, 0.95)
+	track.border_color = Color(0.24, 0.55, 0.78, 0.9)
+	track.set_border_width_all(2)
+	track.set_corner_radius_all(8)
+	track.corner_detail = 12
+	track.content_margin_top = 8.0
+	track.content_margin_bottom = 8.0
+
+	var fill := track.duplicate() as StyleBoxFlat
+	fill.bg_color = Color(0.0, 0.65, 0.9, 1.0)
+	fill.border_color = Color(0.45, 0.95, 1.0, 1.0)
+	fill.shadow_color = Color(0.0, 0.7, 1.0, 0.45)
+	fill.shadow_size = 6
+
+	slider.add_theme_stylebox_override("slider", track)
+	slider.add_theme_stylebox_override("grabber_area", fill)
+	slider.add_theme_stylebox_override("grabber_area_highlight", fill)
+
+	var gradient := Gradient.new()
+	gradient.set_color(0, Color(0.78, 0.98, 1.0, 1.0))
+	gradient.set_color(1, Color(0.0, 0.55, 1.0, 0.0))
+	gradient.add_point(0.6, Color(0.2, 0.85, 1.0, 1.0))
+	var grabber := GradientTexture2D.new()
+	grabber.gradient = gradient
+	grabber.fill = GradientTexture2D.FILL_RADIAL
+	grabber.fill_from = Vector2(0.5, 0.5)
+	grabber.fill_to = Vector2(1.0, 0.5)
+	grabber.width = 44
+	grabber.height = 44
+	slider.add_theme_icon_override("grabber", grabber)
+	slider.add_theme_icon_override("grabber_highlight", grabber)
+	slider.add_theme_icon_override("grabber_disabled", grabber)
+
+func _on_volume_slider_gui_input(event: InputEvent, slider: HSlider) -> void:
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			volume_slider_touches[slider] = event.index
+			slider.drag_started.emit()
+			slider.value = _volume_slider_value_at(slider, event.position.x)
+			slider.accept_event()
+		elif int(volume_slider_touches.get(slider, -1)) == event.index:
+			volume_slider_touches.erase(slider)
+			# Honour the lifted position so a plain tap lands where it was aimed.
+			slider.value = _volume_slider_value_at(slider, event.position.x)
+			slider.drag_ended.emit(true)
+			slider.accept_event()
+	elif event is InputEventScreenDrag and int(volume_slider_touches.get(slider, -1)) == event.index:
+		slider.value = _volume_slider_value_at(slider, event.position.x)
+		slider.accept_event()
+
+func _volume_slider_value_at(slider: HSlider, local_x: float) -> float:
+	var grabber := slider.get_theme_icon("grabber")
+	var grabber_width := float(grabber.get_width()) if grabber else 16.0
+	var travel := maxf(slider.size.x - grabber_width, 1.0)
+	var ratio := clampf((local_x - grabber_width * 0.5) / travel, 0.0, 1.0)
+	return lerpf(slider.min_value, slider.max_value, ratio)
 
 func _sync_settings_controls():
-	music_slider.value = GameState.music_volume * 100.0
+	music_slider.set_value_no_signal(GameState.music_volume * 100.0)
 	music_val_lbl.text = str(int(music_slider.value)) + "%"
 	music_toggle_btn.text = "ON" if GameState.is_music_enabled else "OFF"
 	header_music_toggle.text = "🔊 BGM: ON" if GameState.is_music_enabled else "🔇 BGM: OFF"
 	
-	sfx_slider.value = GameState.sfx_volume * 100.0
+	sfx_slider.set_value_no_signal(GameState.sfx_volume * 100.0)
 	sfx_val_lbl.text = str(int(sfx_slider.value)) + "%"
 	sfx_toggle_btn.text = "ON" if GameState.is_sfx_enabled else "OFF"
 	
-	bloom_check.button_pressed = GameState.bloom_enabled
-	particles_check.button_pressed = GameState.particles_enabled
+	bloom_check.set_pressed_no_signal(GameState.bloom_enabled)
+	particles_check.set_pressed_no_signal(GameState.particles_enabled)
 
 func _on_music_slider_changed(value: float):
 	GameState.music_volume = value / 100.0
 	music_val_lbl.text = str(int(value)) + "%"
 	AudioManager.apply_audio_settings()
-	GameState.save_settings()
+	audio_save_timer.start()
 
 func _on_sfx_slider_changed(value: float):
 	GameState.sfx_volume = value / 100.0
 	sfx_val_lbl.text = str(int(value)) + "%"
 	AudioManager.apply_audio_settings()
+	audio_save_timer.start()
+
+func _on_audio_slider_drag_ended(_value_changed: bool):
+	audio_save_timer.stop()
 	GameState.save_settings()
+
+func _on_sfx_slider_drag_ended(_value_changed: bool):
+	_on_audio_slider_drag_ended(_value_changed)
+	AudioManager.play_click()
 
 func _on_music_toggle_pressed():
 	AudioManager.play_click()
 	GameState.is_music_enabled = !GameState.is_music_enabled
 	_sync_settings_controls()
 	AudioManager.apply_audio_settings()
+	if GameState.is_music_enabled:
+		AudioManager.play_menu_music(0.5)
 	GameState.save_settings()
 
 func _on_sfx_toggle_pressed():
-	AudioManager.play_click()
+	if GameState.is_sfx_enabled:
+		AudioManager.play_click()
 	GameState.is_sfx_enabled = !GameState.is_sfx_enabled
 	_sync_settings_controls()
 	AudioManager.apply_audio_settings()
+	if GameState.is_sfx_enabled:
+		AudioManager.play_click()
 	GameState.save_settings()
 
 func _on_bloom_toggled(toggled_on: bool):
@@ -642,7 +735,8 @@ func _sync_records_view():
 func _setup_button_effects():
 	var buttons = [
 		$Views/HomeView/MenuContainer/PlayBtn,
-		$Views/HomeView/MenuContainer/CharacterBtn,
+		$Views/HomeView/PreviousWarrior,
+		$Views/HomeView/NextWarrior,
 		$Views/HomeView/MenuContainer/BackgroundBtn,
 		records_home_btn,
 		$Views/HomeView/MenuContainer/GuideBtn,
@@ -670,44 +764,50 @@ func _setup_button_effects():
 
 func _on_btn_hover(btn: Button):
 	AudioManager.play_hover()
-	btn.pivot_offset = btn.size / 2.0
-	var tw = create_tween()
-	tw.tween_property(btn, "scale", Vector2(1.04, 1.04), 0.12).set_trans(Tween.TRANS_SINE)
+	_animate_button_scale(btn, 1.025, 0.16)
 
 func _on_btn_unhover(btn: Button):
-	var tw = create_tween()
-	tw.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.12).set_trans(Tween.TRANS_SINE)
+	_animate_button_scale(btn, 1.0, 0.16)
 
 func _on_btn_down(btn: Button):
-	var tw = create_tween()
-	tw.tween_property(btn, "scale", Vector2(0.97, 0.97), 0.08).set_trans(Tween.TRANS_SINE)
+	_animate_button_scale(btn, 0.985, 0.09)
 
 func _on_btn_up(btn: Button):
-	var target = Vector2(1.04, 1.04) if btn.is_hovered() else Vector2(1.0, 1.0)
-	var tw = create_tween()
-	tw.tween_property(btn, "scale", target, 0.1).set_trans(Tween.TRANS_SINE)
+	_animate_button_scale(btn, 1.025 if btn.is_hovered() else 1.0, 0.14)
+
+func _animate_button_scale(btn: Button, target: float, duration: float) -> void:
+	btn.pivot_offset = btn.size * 0.5
+	var previous: Tween = button_tweens.get(btn)
+	if previous and previous.is_valid():
+		previous.kill()
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(btn, "scale", Vector2.ONE * target, duration)
+	button_tweens[btn] = tween
 
 func _style_interactive_card(btn: Button, is_active: bool):
 	var norm := StyleBoxFlat.new()
-	norm.bg_color = Color(0.06, 0.09, 0.15, 0.85)
-	norm.set_corner_radius_all(10)
+	norm.bg_color = Color(0.06, 0.09, 0.15, 0.9)
+	norm.set_corner_radius_all(16)
 	norm.set_border_width_all(2)
+	norm.corner_detail = 16
 	
 	var hov := StyleBoxFlat.new()
-	hov.bg_color = Color(0.12, 0.18, 0.28, 0.95)
-	hov.set_corner_radius_all(10)
+	hov.bg_color = Color(0.1, 0.17, 0.27, 0.96)
+	hov.set_corner_radius_all(16)
 	hov.set_border_width_all(2)
+	hov.corner_detail = 16
 	
 	if is_active:
-		norm.border_color = Color(0.0, 0.9, 1.0, 1.0)
-		norm.shadow_color = Color(0.0, 0.6, 1.0, 0.4)
-		norm.shadow_size = 12
-		hov.border_color = Color(0.4, 1.0, 1.0, 1.0)
-		hov.shadow_color = Color(0.0, 0.8, 1.0, 0.6)
-		hov.shadow_size = 18
+		norm.border_color = Color(0.2, 0.85, 0.95, 0.95)
+		norm.shadow_color = Color(0.0, 0.48, 0.74, 0.26)
+		norm.shadow_size = 8
+		hov.border_color = Color(0.42, 0.95, 1.0, 1.0)
+		hov.shadow_color = Color(0.0, 0.58, 0.8, 0.34)
+		hov.shadow_size = 12
 	else:
-		norm.border_color = Color(0.2, 0.26, 0.36, 0.6)
-		hov.border_color = Color(0.6, 0.7, 0.9, 0.8)
+		norm.border_color = Color(0.28, 0.43, 0.6, 0.75)
+		hov.border_color = Color(0.52, 0.75, 0.9, 0.9)
 	
 	btn.add_theme_stylebox_override("normal", norm)
 	btn.add_theme_stylebox_override("hover", hov)
@@ -727,9 +827,28 @@ func _on_play_btn_pressed():
 		get_tree().change_scene_to_file("res://main.tscn")
 	)
 
-func _on_character_btn_pressed():
+func _on_previous_warrior_pressed() -> void:
+	_cycle_home_character(-1)
+
+func _on_next_warrior_pressed() -> void:
+	_cycle_home_character(1)
+
+func _cycle_home_character(direction: int) -> void:
+	if is_performing_strike:
+		return
+	var characters: Array = GameState.get_all_character_ids()
+	if characters.is_empty():
+		return
+	var current_index: int = characters.find(GameState.selected_character)
+	var next_index: int = posmod(current_index + direction, characters.size())
 	AudioManager.play_click()
-	_switch_view(MenuState.CHARACTER_SELECT)
+	GameState.selected_character = characters[next_index]
+	previewing_char_id = GameState.selected_character
+	GameState.save_settings()
+	_update_hero_stage(GameState.selected_character)
+	if hero_anim:
+		hero_anim.modulate.a = 0.55
+		create_tween().tween_property(hero_anim, "modulate:a", 1.0, 0.2)
 
 func _on_background_btn_pressed():
 	AudioManager.play_click()

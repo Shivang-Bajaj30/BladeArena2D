@@ -23,8 +23,29 @@ extends Node2D
 @export_group("Background Pulse")
 @export var enable_pulse: bool = true
 
+var active_tweens: Array[Tween] = []
+
+func register_tween(t: Tween) -> Tween:
+	active_tweens.append(t)
+	return t
+
+func set_background_paused(paused: bool) -> void:
+	for tween in active_tweens:
+		if is_instance_valid(tween):
+			if paused:
+				tween.pause()
+			else:
+				tween.play()
+	for child in find_children("*", "AnimatedSprite2D"):
+		if is_instance_valid(child):
+			if paused:
+				child.pause()
+			else:
+				child.play()
+
 func _ready():
 	print("=== Background script starting ===")
+	add_to_group("background")
 	if GameState:
 		var bg_data = GameState.get_background_data(GameState.selected_background)
 		if bg_data:
@@ -82,7 +103,7 @@ func create_fog_layers():
 		fog.z_index = -50 + i
 		add_child(fog)
 		
-		var tween := create_tween()
+		var tween := register_tween(create_tween())
 		tween.set_loops()
 		var speed := randf_range(20, 40)
 		tween.tween_property(fog, "position:x", fog.position.x + speed, 12.0 + i * 3)
@@ -157,7 +178,7 @@ func create_orb():
 	var drift_x := randf_range(-150, 150)
 	var drift_y := randf_range(-100, 100)
 	
-	var tween := create_tween()
+	var tween := register_tween(create_tween())
 	tween.set_loops()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(orb, "position:x", orb.position.x + drift_x, duration)
@@ -165,7 +186,7 @@ func create_orb():
 	tween.chain().tween_property(orb, "position:x", orb.position.x, duration)
 	tween.parallel().tween_property(orb, "position:y", orb.position.y, duration)
 	
-	var pulse := create_tween()
+	var pulse := register_tween(create_tween())
 	pulse.set_loops()
 	pulse.tween_property(orb, "modulate:a", 0.3, 1.5)
 	pulse.tween_property(orb, "modulate:a", 1.0, 1.5)
@@ -174,7 +195,7 @@ func create_orb():
 # 5. Global pulse
 # ------------------------------------------------------------
 func start_pulse():
-	var tween := create_tween()
+	var tween := register_tween(create_tween())
 	tween.set_loops()
 	tween.tween_property(self, "modulate", Color(1.05, 1.05, 1.1), 3.0)
 	tween.tween_property(self, "modulate", Color(1, 1, 1), 3.0)
