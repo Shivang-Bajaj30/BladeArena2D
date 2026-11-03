@@ -23,6 +23,11 @@ extends Node2D
 @export_group("Background Pulse")
 @export var enable_pulse: bool = true
 
+# The painted ground line sits this far below the floor collider so the fighters
+# read as standing on top of the land instead of sunk into it. Raise fighters by
+# increasing this value (it only moves the artwork, never the physics floor).
+const GROUND_LINE_LIFT: float = 20.0
+
 var active_tweens: Array[Tween] = []
 
 func register_tween(t: Tween) -> Tween:
@@ -83,10 +88,40 @@ func create_base_background():
 				add_child(sprite)
 			sprite.texture = load(bg_data["texture_path"])
 			sprite.position = Vector2(0, 0)
-			# Scale to comfortably cover arena bounds
-			sprite.scale = Vector2(2.4, 2.4)
+			# Keep the scene's framing. The Background node is already scaled 1.5x
+			# in main.tscn, which makes the artwork exactly cover the camera's
+			# ±1440 x ±612 limits (the layout shown in the arena screenshot).
+			# Over-scaling it here cropped the painted ground out of view.
+			sprite.scale = Vector2.ONE
 			sprite.modulate = Color(1.0, 1.0, 1.0, 0.85)
 			sprite.z_index = -90
+			# Pin the artwork's ground line to the physical arena floor so the
+			# fighters stand on the painted land instead of hovering above it.
+			align_sprite_ground(sprite, bg_data)
+
+# Puts the image row marked by `ground_ratio` on the arena floor (plus the
+# visual lift above).
+func align_sprite_ground(sprite: Sprite2D, bg_data: Dictionary) -> void:
+	if sprite.texture == null:
+		return
+	var ground_ratio: float = float(bg_data.get("ground_ratio", 0.78))
+	var world_height: float = sprite.texture.get_height() * absf(sprite.global_scale.y)
+	var floor_y: float = arena_floor_y() + GROUND_LINE_LIFT
+	var center_y: float = floor_y - (ground_ratio - 0.5) * world_height
+	sprite.global_position = Vector2(sprite.global_position.x, center_y)
+
+# World Y of the arena floor, read from the sibling collider so it stays in
+# sync if the arena layout ever changes.
+func arena_floor_y() -> float:
+	var parent := get_parent()
+	if parent:
+		var floor_body := parent.get_node_or_null("floor")
+		if floor_body:
+			var shape_node := floor_body.get_node_or_null("CollisionShape2D") as CollisionShape2D
+			if shape_node and shape_node.shape is RectangleShape2D:
+				var rect := shape_node.shape as RectangleShape2D
+				return shape_node.global_position.y - rect.size.y * 0.5 * absf(shape_node.global_scale.y)
+	return 515.0
 
 # ------------------------------------------------------------
 # 2. Fog layers

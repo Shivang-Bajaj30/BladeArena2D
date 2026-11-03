@@ -326,10 +326,10 @@ func _setup_background_selection_view():
 		var lbl := Label.new()
 		lbl.text = data["name"]
 		lbl.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
-		lbl.offset_top = -52
+		lbl.offset_top = -58
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		lbl.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		lbl.add_theme_font_size_override("font_size", 20)
+		lbl.add_theme_font_size_override("font_size", 24)
 		lbl.add_theme_color_override("font_color", Color(1, 1, 1))
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(lbl)
@@ -490,7 +490,7 @@ func _setup_character_selection_view():
 		name_label.offset_top = -88
 		name_label.offset_bottom = -44
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_label.add_theme_font_size_override("font_size", 22)
+		name_label.add_theme_font_size_override("font_size", 24)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(name_label)
 		
@@ -499,7 +499,7 @@ func _setup_character_selection_view():
 		role_label.set_anchors_preset(Control.PRESET_BOTTOM_WIDE)
 		role_label.offset_top = -46
 		role_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		role_label.add_theme_font_size_override("font_size", 19)
+		role_label.add_theme_font_size_override("font_size", 21)
 		role_label.add_theme_color_override("font_color", Color(0.0, 0.8, 1.0) if char_id == "blade_master" else Color(1.0, 0.5, 0.2))
 		role_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(role_label)

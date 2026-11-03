@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+D3D12 12_0 - Forward Mobile - Using Device #0: NVIDIA - NVIDIA GeForce RTX 2050
+
+=== Background script starting ===
+=== Background setup complete ===
+SPAWN player=(-350.0, 512.0) opp=(350.0, 512.0)
+  Player tex=(512.0, 512.0) sprite_pos=(90.44998, 663.8) offset=(-400.0, -300.0) feet_y=613.199988842011
+  Opponent tex=(512.0, 512.0) sprite_pos=(790.45, 663.8) offset=(-400.0, -300.0) feet_y=613.199988842011
+REST player=(-350.0, 468.9361) opp=(-129.0334, 468.9253)

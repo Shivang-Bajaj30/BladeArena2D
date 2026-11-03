@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal health_changed(current: float, maximum: float)
 signal defeated(fighter: Node)
+signal enemy_died()
 
 @export var target_path: NodePath = NodePath("../Player")
 @export var walk_speed: float = 165.0
@@ -24,6 +25,11 @@ signal defeated(fighter: Node)
 var target: CharacterBody2D
 var arsenal_mode: StringName = &"sword"
 var health: float
+var current_health: float:
+	get: return health
+	set(val):
+		health = val
+		health_changed.emit(health, max_health)
 var facing_right: bool = false
 var is_attacking: bool = false
 var is_evading: bool = false
@@ -77,12 +83,12 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity.y += gravity * delta
 		velocity.x = move_toward(velocity.x, 0.0, 850.0 * delta)
-		move_and_slide()
+		move_and_clamp()
 		return
 	if not is_instance_valid(target) or target.get("is_defeated") == true:
 		velocity.x = move_toward(velocity.x, 0.0, 700.0 * delta)
 		play_if_changed(get_mode_animation("idle"))
-		move_and_slide()
+		move_and_clamp()
 		return
 
 	if not is_on_floor():
@@ -188,7 +194,26 @@ func _physics_process(delta: float) -> void:
 
 func move_and_clamp() -> void:
 	move_and_slide()
-	global_position.x = clampf(global_position.x, -1060.0, 1060.0)
+	var limits := get_arena_center_limits()
+	global_position.x = clampf(global_position.x, limits.x, limits.y)
+
+# The side-wall artwork is the arena boundary. Keep the body center far enough
+# inside that the collision box never crosses the painted wall face.
+func get_arena_center_limits() -> Vector2:
+	var half_width := 25.0 * absf(global_scale.x)
+	if collision_shape and collision_shape.shape is RectangleShape2D:
+		half_width = (collision_shape.shape as RectangleShape2D).size.x * absf(collision_shape.global_scale.x) * 0.5
+	var left_edge := -1069.0
+	var right_edge := 1069.0
+	var parent := get_parent()
+	if parent:
+		var left_wall := parent.get_node_or_null("LeftArenaWall") as Sprite2D
+		if left_wall and left_wall.texture:
+			left_edge = left_wall.global_position.x + left_wall.texture.get_width() * absf(left_wall.global_scale.x) * 0.5
+		var right_wall := parent.get_node_or_null("RightArenaWall") as Sprite2D
+		if right_wall and right_wall.texture:
+			right_edge = right_wall.global_position.x - right_wall.texture.get_width() * absf(right_wall.global_scale.x) * 0.5
+	return Vector2(left_edge + half_width, right_edge - half_width)
 
 func start_attack() -> void:
 	is_attacking = true
@@ -357,6 +382,30 @@ func defeat() -> void:
 	tween.tween_property(anim, "rotation", deg_to_rad(-82.0 if facing_right else 82.0), 0.42).set_trans(Tween.TRANS_BACK)
 	tween.tween_property(anim, "modulate:a", 0.4, 0.65)
 	defeated.emit(self)
+	enemy_died.emit()
+
+func take_damage(dmg: float, dir: float = 0.0, force: float = 0.0) -> void:
+	apply_damage(dmg, null, dir * force)
+
+func reset_for_round(start_pos: Vector2, look_right: bool = false) -> void:
+	health = max_health
+	health_changed.emit(health, max_health)
+	is_defeated = false
+	is_special_paused = false
+	is_attacking = false
+	is_evading = false
+	is_sliding = false
+	hit_invulnerability = 0.0
+	velocity = Vector2.ZERO
+	global_position = start_pos
+	facing_right = look_right
+	if is_instance_valid(anim):
+		anim.rotation = 0.0
+		anim.modulate = base_tint
+		anim.flip_h = not look_right
+		anim.play(get_mode_animation("idle"))
+	if is_instance_valid(collision_shape):
+		collision_shape.set_deferred("disabled", false)
 
 func spawn_transform_smoke() -> void:
 	for i in range(14):
@@ -368,7 +417,7 @@ func spawn_transform_smoke() -> void:
 			points.append(Vector2(cos(angle), sin(angle)) * radius)
 		puff.polygon = points
 		puff.color = Color(0.84, 0.38, 0.76, randf_range(0.45, 0.76))
-		puff.global_position = global_position + Vector2(randf_range(-58.0, 58.0), randf_range(-105.0, 28.0))
+		puff.global_position = global_position + Vector2(randf_range(-58.0, 58.0), randf_range(-187.0, -54.0))
 		puff.z_index = 12
 		get_parent().add_child(puff)
 		var tween := create_tween().set_parallel(true)
@@ -381,7 +430,7 @@ func create_speed_line() -> void:
 	var line := ColorRect.new()
 	line.size = Vector2(randf_range(28.0, 58.0), randf_range(1.0, 3.0))
 	line.color = Color(0.85, 0.55, 1.0, 0.72)
-	line.global_position = global_position + Vector2(randf_range(-45.0, 45.0), randf_range(-55.0, 25.0))
+	line.global_position = global_position + Vector2(randf_range(-45.0, 45.0), randf_range(-137.0, -57.0))
 	line.z_index = 5
 	get_parent().add_child(line)
 	var tween := create_tween().set_parallel(true)

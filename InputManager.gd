@@ -7,6 +7,9 @@ extends Node
 # --- Touch State ---
 var joystick_vector: Vector2 = Vector2.ZERO
 var joystick_active: bool = false
+# True while a finger is down on the native VirtualJoystick. The analog vector
+# itself is read from the InputMap actions the joystick drives.
+var joystick_touch_active: bool = false
 
 # Action buttons (set by touch controls)
 var action_pressed: Dictionary = {
@@ -43,6 +46,12 @@ const KEYBOARD_ACTIONS = {
 }
 
 func _ready() -> void:
+	# The native VirtualJoystick writes all four directions; only left/right are
+	# used by the side-view arena, but the actions must exist so the engine node
+	# can press them safely.
+	for axis_action in ["move_up", "move_down"]:
+		if not InputMap.has_action(axis_action):
+			InputMap.add_action(axis_action)
 	_ensure_action_key("dodge", KEY_F)
 	_ensure_action_key("dodge", KEY_SHIFT)
 	_ensure_action_key("slide", KEY_DOWN)
@@ -112,6 +121,26 @@ func get_movement_vector() -> Vector2:
 # Touch API
 # ------------------------------------------------------------
 
+# The native VirtualJoystick writes analog strengths into these InputMap
+# actions, so movement is read straight from the engine while a finger is down.
+func _physics_process(_delta: float) -> void:
+	if not joystick_touch_active:
+		return
+	var strength: float = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	joystick_vector = Vector2(strength, 0.0)
+	joystick_active = absf(strength) > 0.1
+
+
+func begin_joystick_touch() -> void:
+	joystick_touch_active = true
+
+
+func end_joystick_touch() -> void:
+	joystick_touch_active = false
+	joystick_vector = Vector2.ZERO
+	joystick_active = false
+
+
 func set_joystick(value: Vector2) -> void:
 	joystick_vector = value
 	joystick_active = value.length() > 0.1
@@ -119,10 +148,9 @@ func set_joystick(value: Vector2) -> void:
 
 func press_button(action: String) -> void:
 	if action in action_pressed:
-		# Ignore duplicate press notifications while the same control is held,
-		# but queue every real new tap until gameplay consumes it.
-		if action_pressed[action]:
-			return
+		# Every touch-down is a real tap. The old guard ignored a press whenever
+		# the matching release had been dropped, which silently killed combo
+		# inputs until the button happened to be released again.
 		action_pressed[action] = true
 		action_press_count[action] += 1
 
@@ -148,8 +176,14 @@ func _is_movement_action(action: String) -> bool:
 
 
 func reset_touch_state() -> void:
+	joystick_touch_active = false
 	joystick_vector = Vector2.ZERO
 	joystick_active = false
+	# Also clear the action strengths the native joystick drives, otherwise a
+	# release lost while paused could leave the fighter walking on resume.
+	for move_action in ["move_left", "move_right", "move_up", "move_down"]:
+		if InputMap.has_action(move_action):
+			Input.action_release(move_action)
 	for key in action_pressed.keys():
 		action_pressed[key] = false
 	for key in action_press_count.keys():

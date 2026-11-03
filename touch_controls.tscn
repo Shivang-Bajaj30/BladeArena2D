@@ -1,39 +1,33 @@
 [gd_scene format=3 uid="uid://bb5xmmha08ht8"]
 
-[ext_resource type="Script" uid="uid://crddlmdfg8xyh" path="res://TouchJoystick.gd" id="1_1gcqp"]
-[ext_resource type="Texture2D" uid="uid://b1js2gksop6n4" path="res://VirtualJoystickPack/outer.png" id="2_ojhyh"]
-[ext_resource type="Texture2D" uid="uid://buwjjn52aiahh" path="res://VirtualJoystickPack/inner.png" id="3_qpxdh"]
+[ext_resource type="Script" path="res://NativeJoystick.gd" id="1_native_joystick"]
 [ext_resource type="Texture2D" uid="uid://dk36pr3ki48uq" path="res://punch_final.png" id="4_ojhyh"]
 [ext_resource type="Script" uid="uid://0c806sb42sbo" path="res://IconButton.gd" id="5_qpxdh"]
 [ext_resource type="Texture2D" uid="uid://iohp1etfvy3g" path="res://outer.png" id="6_dash_bg"]
 [ext_resource type="Texture2D" uid="uid://dlji7bkhhjt2u" path="res://dash.png" id="7_dash_icon"]
 [ext_resource type="Texture2D" uid="uid://b0go0r5tt6cwy" path="res://jump_icon.png" id="8_jump_icon"]
 [ext_resource type="Texture2D" uid="uid://dw7ju0kr806vk" path="res://slide_icon.png" id="9_slide_icon"]
-[ext_resource type="Script" uid="uid://b216n1mthk7lf" path="res://BattleHUD.gd" id="11_battle_hud"]
 
 [node name="TouchControls" type="CanvasLayer" unique_id=1925361234]
 
-[node name="BattleHUD" type="Control" parent="." unique_id=1233048624]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-script = ExtResource("11_battle_hud")
-
-[node name="Joystick" type="TouchScreenButton" parent="." unique_id=510015086]
-position = Vector2(300, 790)
-scale = Vector2(3.4, 3.4)
-script = ExtResource("1_1gcqp")
-base_texture = ExtResource("2_ojhyh")
-knob_texture = ExtResource("3_qpxdh")
-
-[node name="Bg" type="Sprite2D" parent="Joystick" unique_id=859947093]
-scale = Vector2(0.5, 0.5)
-
-[node name="Knob" type="Sprite2D" parent="Joystick" unique_id=909999149]
+[node name="Joystick" type="VirtualJoystick" parent="." unique_id=510015086]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 510.0
+offset_right = 580.0
+offset_bottom = 1070.0
+joystick_mode = 0
+joystick_size = 280.0
+tip_size = 136.0
+deadzone_ratio = 0.12
+clampzone_ratio = 1.0
+initial_offset_ratio = Vector2(0.5, 0.5)
+action_left = &"move_left"
+action_right = &"move_right"
+action_up = &"move_up"
+action_down = &"move_down"
+visibility_mode = 0
+script = ExtResource("1_native_joystick")
 
 [node name="ActionButtons" type="Control" parent="." unique_id=1289108993]
 layout_mode = 3
@@ -88,4 +82,3 @@ action_name = "dodge"
 position = Vector2(98.529396, 101.4706)
 scale = Vector2(0.30445787, 0.29871333)
 texture = ExtResource("7_dash_icon")
-

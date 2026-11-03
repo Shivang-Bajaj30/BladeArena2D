@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+=== Background script starting ===
+=== Background setup complete ===
+Player box_center_y=512.0 visual_head_y=273.949995875359 visual_feet_y=460.249992012978 floor_top=515.0  gap_to_floor=54.7500079870224
+Opponent box_center_y=512.0 visual_head_y=273.949995875359 visual_feet_y=460.249992012978 floor_top=515.0  gap_to_floor=54.7500079870224
+REST Player box_y=468.936126708984 visual_feet_y=417.18614923954 gap_to_floor=97.8138507604599
+REST Opponent box_y=468.925262451172 visual_feet_y=417.175284981728 gap_to_floor=97.8247150182724
+WARNING: 4 ObjectDB instances were leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)
+ERROR: 2 resources still in use at exit (run with --verbose for details).
+   at: clear (core/io/resource.cpp:822)

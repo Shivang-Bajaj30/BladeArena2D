@@ -31,6 +31,8 @@ func _ready() -> void:
 	create_overlay()
 
 func _input(event: InputEvent) -> void:
+	if get_tree().paused:
+		return
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_E or event.keycode == KEY_Q or event.keycode == KEY_R:
 			if not active and cooldown_remaining <= 0.0 and is_instance_valid(player):
@@ -169,7 +171,7 @@ func set_entities_paused(paused: bool) -> void:
 		bg_node.set_background_paused(paused)
 
 func activate_ultimate() -> void:
-	if active or cooldown_remaining > 0.0 or not is_instance_valid(player):
+	if get_tree().paused or active or cooldown_remaining > 0.0 or not is_instance_valid(player):
 		return
 	if not player.has_method("can_use_getsuga") or not player.can_use_getsuga():
 		show_unavailable()

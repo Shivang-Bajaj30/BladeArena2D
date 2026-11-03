@@ -97,7 +97,7 @@ func run_checks() -> void:
 	var preview_rect: Rect2 = menu.get_node("Views/CharacterSelectView/PreviewBox").get_global_rect()
 	if not check(preview_rect.position.y == details_rect.position.y and preview_rect.size.y == details_rect.size.y, "Warrior preview and details panels are misaligned"):
 		return
-	menu._switch_view(3, true)
+	menu._switch_view(4, true)
 	await process_frame
 	var guide_cards: Control = menu.get_node("Views/HowToPlayView/Content")
 	for card in guide_cards.get_children():
@@ -110,7 +110,7 @@ func run_checks() -> void:
 	var last_background: Control = background_grid.get_child(background_grid.get_child_count() - 1)
 	if not check(last_background.position.x + last_background.size.x <= background_grid.size.x + 1.0, "Larger environment cards overflow their grid"):
 		return
-	menu._switch_view(4, true)
+	menu._switch_view(5, true)
 	await process_frame
 	var settings_content: VBoxContainer = menu.get_node("Views/SettingsView/Panel/VBox")
 	var last_section: Control = settings_content.get_child(settings_content.get_child_count() - 1)

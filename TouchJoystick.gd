@@ -20,8 +20,15 @@ var _touch_index: int = -1
 var _active: bool = false
 var _touch_positions: Dictionary = {}
 var _owner_screen_position: Vector2 = Vector2.ZERO
+var _owner_last_event_ms: int = 0
+
+# After this long without a single event from the owner, a press reusing its
+# index far from the stick is treated as a recycled Android pointer rather than
+# as the live owner. Keeps a live stick from being reset by a spurious event.
+const STALE_OWNER_MS: int = 250
 
 func _ready():
+	add_to_group("touch_joystick")
 	set_process_input(true)
 	create_visuals()
 
@@ -45,44 +52,64 @@ func create_visuals():
 func _input(event):
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			# Some Android touch stacks briefly reuse/rebase an index while a
-			# second finger swipes across buttons. Reject an impossible jump to
-			# the action side instead of letting it overwrite joystick ownership.
-			if _active and event.index == _touch_index and not is_plausible_owner_touch(event.position):
-				return
+			# A press is always a brand-new finger. If it reuses the owner's index
+			# but lands away from the stick AND the owner has been silent, the OS
+			# recycled the index after the real owner was lifted and its release
+			# was lost. While the owner is still reporting, ignore such a spurious
+			# event instead of resetting a live stick.
+			if _active and event.index == _touch_index and not can_recover_touch(event.position) \
+					and Time.get_ticks_msec() - _owner_last_event_ms >= STALE_OWNER_MS:
+				_active = false
+				_touch_index = -1
+				_owner_screen_position = Vector2.ZERO
+				reset_joystick()
 			_touch_positions[event.index] = event.position
-			if _active and event.index != _touch_index and can_recover_touch(event.position):
+			if not _active and can_claim_touch(event.position):
 				claim_touch(event.index, event.position)
-			elif not _active and can_claim_touch(event.position):
+			elif _active and event.index != _touch_index and is_inside_core_area(event.position):
+				# Re-grip: a new finger planted right on the stick takes over.
 				claim_touch(event.index, event.position)
 		else:
-			if event.index == _touch_index and not is_plausible_owner_touch(event.position):
-				return
 			_touch_positions.erase(event.index)
 			if event.index == _touch_index:
+				# Always release/hand off on the owner's release. Bailing out on a
+				# suspicious position used to leave the joystick stuck active.
 				handoff_or_release()
 	elif event is InputEventScreenDrag:
 		if event.index == _touch_index:
-			if not is_plausible_owner_motion(event.position):
+			# The owning finger is identified by its touch index, so its motion
+			# never needs a position sanity check. The old distance/side filters
+			# rejected real fast flicks (a thumb can jump far between frames or
+			# cross the screen midline), which froze the stick mid-sweep and felt
+			# exactly like the joystick "slipping". Only discard Android's bogus
+			# zero-coordinate event.
+			if is_zero_position_glitch(event.position):
 				return
 			_touch_positions[event.index] = event.position
 			_owner_screen_position = event.position
+			_owner_last_event_ms = Time.get_ticks_msec()
 			update_joystick(event.position)
 		else:
 			_touch_positions[event.index] = event.position
-			# Android can renumber the remaining finger after an action-button
-			# finger is lifted. A drag still inside the joystick capture area is
-			# therefore allowed to take ownership immediately.
-			if _active and can_recover_touch(event.position):
+			if not _active:
+				# Android occasionally delivers a drag before the matching press.
+				if can_claim_touch(event.position):
+					claim_touch(event.index, event.position)
+			elif can_recover_touch(event.position):
+				# Android reassigns pointer indices when another finger lifts, so
+				# the joystick's finger can suddenly report under a new index. The
+				# drag is on the stick side, so let the surviving finger take over
+				# immediately instead of freezing the stick. Action-button fingers
+				# (right side) can never satisfy this test.
 				claim_touch(event.index, event.position)
-		if not _active and can_claim_touch(event.position):
-			# Also recover when Android delivers a drag before the matching press
-			# after a very fast finger swap.
-			claim_touch(event.index, event.position)
 
 func is_inside_area(pos: Vector2) -> bool:
 	var local_pos: Vector2 = get_global_transform_with_canvas().affine_inverse() * pos
 	return local_pos.length() < max_radius * activation_radius_multiplier
+
+func is_inside_core_area(pos: Vector2) -> bool:
+	var local_pos: Vector2 = get_global_transform_with_canvas().affine_inverse() * pos
+	return local_pos.length() < max_radius * 1.5
 
 func is_inside_handoff_area(pos: Vector2) -> bool:
 	var local_pos: Vector2 = get_global_transform_with_canvas().affine_inverse() * pos
@@ -127,6 +154,7 @@ func claim_touch(index: int, pos: Vector2) -> void:
 	_touch_index = index
 	_active = true
 	_owner_screen_position = pos
+	_owner_last_event_ms = Time.get_ticks_msec()
 	update_joystick(pos)
 
 func handoff_or_release() -> void:
@@ -135,6 +163,8 @@ func handoff_or_release() -> void:
 	var inverse_canvas := get_global_transform_with_canvas().affine_inverse()
 
 	for index in _touch_positions.keys():
+		if index == _touch_index:
+			continue
 		var pos: Vector2 = _touch_positions[index]
 		if not is_on_joystick_side(pos) or not is_inside_handoff_area(pos):
 			continue
@@ -175,6 +205,15 @@ func reset_joystick():
 	if knob:
 		knob.position = Vector2.ZERO
 	InputManager.set_joystick(Vector2.ZERO)
+
+func release_all() -> void:
+	# Called when the game pauses: releases that happen while input is suspended
+	# never reach _input(), so clear ownership explicitly to avoid a stuck stick.
+	_active = false
+	_touch_index = -1
+	_touch_positions.clear()
+	_owner_screen_position = Vector2.ZERO
+	reset_joystick()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:

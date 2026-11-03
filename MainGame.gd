@@ -7,6 +7,10 @@ extends Node2D
 const ROUND_TIME: float = 60.0
 const ROUNDS_TO_WIN: int = 2
 
+const PLAYER_SPAWN_X: float = -350.0
+const ENEMY_SPAWN_X: float = 350.0
+const FALLBACK_FLOOR_TOP_Y: float = 515.0
+
 var player_node: Node2D
 var enemy_node: Node2D
 
@@ -36,93 +40,172 @@ var pause_btn: Button
 # Pause Menu
 var pause_panel: PanelContainer
 var is_game_paused: bool = false
+var round_transitioning: bool = false
 
 func _ready() -> void:
+	# The game manager must keep running for pause input and UI, but gameplay
+	# nodes are switched back to PAUSABLE in _setup_combatants().
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	AudioManager.play_menu_music(0.8)
-	
+
+	var touch_controls := get_node_or_null("TouchControls")
+	if touch_controls:
+		touch_controls.process_mode = Node.PROCESS_MODE_PAUSABLE
+	var background := get_node_or_null("Background")
+	if background:
+		background.process_mode = Node.PROCESS_MODE_PAUSABLE
+
 	_setup_combatants()
 	_create_combat_hud()
 	_create_banner_ui()
 	_create_pause_ui()
-	_create_hud_buttons()
+	_start_round(1)
 
-func _input(event: InputEvent):
+func _process(delta: float) -> void:
+	if not is_round_active or match_ended or get_tree().paused:
+		return
+
+	time_left = maxf(0.0, time_left - delta)
+	if timer_lbl:
+		timer_lbl.text = str(int(ceil(time_left)))
+		var timer_color := Color(1.0, 0.3, 0.3) if time_left <= 10.0 else Color(1.0, 1.0, 1.0)
+		timer_lbl.add_theme_color_override("font_color", timer_color)
+
+	if time_left <= 0.0:
+		_on_round_timer_expired()
+
+func _input(event: InputEvent) -> void:
+	# The special-attack cut-in pauses the tree on its own. Ignore pause input
+	# while that sequence owns the pause state.
+	if get_tree().paused and not is_game_paused:
+		return
 	if event.is_action_pressed("pause") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
 		toggle_pause()
 
 # ------------------------------------------------------------------------------
 # 1. SETUP COMBATANTS
 # ------------------------------------------------------------------------------
+
 func _setup_combatants() -> void:
 	player_node = get_node_or_null("Player")
 	if player_node:
-		player_node.global_position = Vector2(-350, 512)
-		if player_node.has_signal("health_changed"):
+		player_node.process_mode = Node.PROCESS_MODE_PAUSABLE
+		player_node.global_position = Vector2(PLAYER_SPAWN_X, _fighter_ground_y(player_node))
+		if player_node.has_signal("health_changed") and not player_node.health_changed.is_connected(_on_player_health_changed):
 			player_node.health_changed.connect(_on_player_health_changed)
-		if player_node.has_signal("player_died"):
+		if player_node.has_signal("player_died") and not player_node.player_died.is_connected(_on_player_died):
 			player_node.player_died.connect(_on_player_died)
-	
+		elif player_node.has_signal("defeated") and not player_node.defeated.is_connected(func(_f): _on_player_died()):
+			player_node.defeated.connect(func(_f): _on_player_died())
+		var p_hp: float = player_node.get("current_health") if player_node.get("current_health") != null else 100.0
+		var p_max: float = player_node.get("max_health") if player_node.get("max_health") != null else 100.0
+		_on_player_health_changed(p_hp, p_max)
+
 	# Spawn or locate Enemy
 	enemy_node = get_node_or_null("Enemy")
+	if enemy_node == null:
+		enemy_node = get_node_or_null("Opponent")
 	if enemy_node == null:
 		var enemy_script = load("res://Enemy.gd")
 		enemy_node = CharacterBody2D.new()
 		enemy_node.name = "Enemy"
 		enemy_node.set_script(enemy_script)
 		add_child(enemy_node)
-	
-	enemy_node.global_position = Vector2(350, 512)
-	if enemy_node.has_signal("health_changed"):
+
+	enemy_node.process_mode = Node.PROCESS_MODE_PAUSABLE
+	enemy_node.global_position = Vector2(ENEMY_SPAWN_X, _fighter_ground_y(enemy_node))
+	if enemy_node.has_signal("health_changed") and not enemy_node.health_changed.is_connected(_on_enemy_health_changed):
 		enemy_node.health_changed.connect(_on_enemy_health_changed)
-	if enemy_node.has_signal("enemy_died"):
+	if enemy_node.has_signal("enemy_died") and not enemy_node.enemy_died.is_connected(_on_enemy_died):
 		enemy_node.enemy_died.connect(_on_enemy_died)
+	elif enemy_node.has_signal("defeated"):
+		enemy_node.defeated.connect(func(_f): _on_enemy_died())
+	var e_hp: float = enemy_node.get("current_health") if enemy_node.get("current_health") != null else (enemy_node.get("health") if enemy_node.get("health") != null else 100.0)
+	var e_max: float = enemy_node.get("max_health") if enemy_node.get("max_health") != null else 100.0
+	_on_enemy_health_changed(e_hp, e_max)
+
+# Top edge of the arena floor in world space. Read from the collider instead of
+# hard-coding it so the spawn height follows any floor move/rescale.
+func _floor_top_y() -> float:
+	var floor_body := get_node_or_null("floor")
+	if floor_body:
+		var floor_shape := floor_body.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if floor_shape and floor_shape.shape is RectangleShape2D:
+			var floor_rect := floor_shape.shape as RectangleShape2D
+			return floor_shape.global_position.y - floor_rect.size.y * 0.5 * absf(floor_shape.global_scale.y)
+	return FALLBACK_FLOOR_TOP_Y
+
+# Body origin height that puts the fighter's collision box exactly on the floor.
+# The collision box was aligned with the sprite's soles, so this also makes the
+# character stand on the ground instead of hovering and dropping in.
+func _fighter_ground_y(fighter: Node2D) -> float:
+	var floor_top := _floor_top_y()
+	var body_shape := fighter.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	if body_shape and body_shape.shape is RectangleShape2D:
+		var body_rect := body_shape.shape as RectangleShape2D
+		var bottom_offset: float = (body_shape.position.y + body_rect.size.y * 0.5) * fighter.global_scale.y
+		return floor_top - bottom_offset
+	return floor_top
 
 # ------------------------------------------------------------------------------
 # 2. ROUND MANAGEMENT & MATCH FLOW
 # ------------------------------------------------------------------------------
+
 func _start_round(round_idx: int) -> void:
 	current_round = round_idx
 	time_left = ROUND_TIME
 	is_round_active = false
-	
-	# Reset combatant states
+	round_transitioning = true
+
+	# Reset combatant states onto the actual floor surface so the round banner
+	# never shows the fighters hovering in mid-air before physics resumes.
 	if player_node and player_node.has_method("reset_for_round"):
-		player_node.reset_for_round(Vector2(-350, 512), true)
+		player_node.reset_for_round(Vector2(PLAYER_SPAWN_X, _fighter_ground_y(player_node)), true)
 	if enemy_node and enemy_node.has_method("reset_for_round"):
-		enemy_node.reset_for_round(Vector2(350, 512), false)
-	
+		enemy_node.reset_for_round(Vector2(ENEMY_SPAWN_X, _fighter_ground_y(enemy_node)), false)
+	# Freeze the fighters until the ROUND / FIGHT banner finishes so nobody can
+	# take damage before the round actually starts.
+	_set_combatants_processing(false)
+
 	_update_hud_display()
-	
+
 	# Display round announcement banner
 	_show_round_start_banner("ROUND %d" % current_round, "FIGHT!")
+
+func _set_combatants_processing(active: bool) -> void:
+	if player_node:
+		player_node.set_physics_process(active)
+	if enemy_node:
+		enemy_node.set_physics_process(active)
 
 func _show_round_start_banner(title: String, subtitle: String) -> void:
 	var banner_box: Control = banner_canvas.get_node("BannerBox")
 	var title_lbl: Label = banner_box.get_node("Title")
 	var sub_lbl: Label = banner_box.get_node("Subtitle")
-	
+
 	title_lbl.text = title
 	title_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 	sub_lbl.text = subtitle
-	
+
 	banner_canvas.visible = true
 	banner_box.scale = Vector2(0.6, 0.6)
 	banner_box.modulate.a = 0.0
-	
+
 	var tw = create_tween()
 	tw.set_parallel(true)
 	tw.tween_property(banner_box, "scale", Vector2(1.0, 1.0), 0.35).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_property(banner_box, "modulate:a", 1.0, 0.35)
-	
+
 	await get_tree().create_timer(1.2).timeout
-	
+
 	var fade_tw = create_tween()
 	fade_tw.tween_property(banner_box, "modulate:a", 0.0, 0.3)
 	fade_tw.tween_callback(func():
 		banner_canvas.visible = false
+		round_transitioning = false
 		if not match_ended:
 			is_round_active = true
+			_set_combatants_processing(true)
 	)
 
 func _on_player_died() -> void:
@@ -138,7 +221,7 @@ func _on_enemy_died() -> void:
 	is_round_active = false
 	player_wins += 1
 	_update_hud_display()
-	
+
 	# Per Requirement 2: Winning all rounds returns home with victory
 	if player_wins >= ROUNDS_TO_WIN:
 		_trigger_match_victory("VICTORY!", "CHAMPION OF THE ARENA")
@@ -153,10 +236,10 @@ func _on_round_timer_expired() -> void:
 	if match_ended:
 		return
 	is_round_active = false
-	
+
 	var p_hp: float = player_node.get("current_health") if player_node else 0.0
 	var e_hp: float = enemy_node.get("current_health") if enemy_node else 0.0
-	
+
 	if p_hp > e_hp:
 		# Player had more HP, wins round
 		_on_enemy_died()
@@ -169,12 +252,12 @@ func _trigger_match_victory(title: String, subtitle: String) -> void:
 		return
 	match_ended = true
 	is_round_active = false
-	
+
 	# Persistent stats update - single record
 	GameState.record_match_result(true)
-	
+
 	_show_match_end_banner(title, subtitle, Color(1.0, 0.88, 0.2), Color(0.1, 0.8, 1.0))
-	
+
 	# Return to Home Screen after clear celebration
 	await get_tree().create_timer(2.6).timeout
 	_return_to_home_screen()
@@ -184,200 +267,218 @@ func _trigger_match_defeat(title: String, subtitle: String) -> void:
 		return
 	match_ended = true
 	is_round_active = false
-	
+
 	# Persistent stats update - single record
 	GameState.record_match_result(false)
-	
+
 	_show_match_end_banner(title, subtitle, Color(1.0, 0.25, 0.25), Color(0.8, 0.1, 0.1))
-	
+
 	# Return to Home Screen after clear defeat message
 	await get_tree().create_timer(2.6).timeout
 	_return_to_home_screen()
 
 func _return_to_home_screen() -> void:
-	get_tree().paused = false
+	_reset_gameplay_state()
 	get_tree().change_scene_to_file("res://menu.tscn")
 
 # ------------------------------------------------------------------------------
 # 3. COMBAT HUD (ENLARGED & PROFESSIONAL)
 # ------------------------------------------------------------------------------
+
 func _create_combat_hud() -> void:
 	hud_canvas = CanvasLayer.new()
 	hud_canvas.layer = 15
 	add_child(hud_canvas)
-	
+
 	var root := Control.new()
 	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hud_canvas.add_child(root)
-	
+
 	# Top combat bar container
 	var top_bar := HBoxContainer.new()
 	top_bar.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	top_bar.offset_left = 40
-	top_bar.offset_top = 22
+	top_bar.offset_top = 24
 	top_bar.offset_right = -40
-	top_bar.offset_bottom = 100
+	top_bar.offset_bottom = 140
 	top_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	top_bar.add_theme_constant_override("separation", 24)
+	top_bar.add_theme_constant_override("separation", 30)
 	root.add_child(top_bar)
-	
+
 	# --- PLAYER CARD (Left) ---
 	var player_box := VBoxContainer.new()
 	player_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	player_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	player_box.add_theme_constant_override("separation", 4)
 	top_bar.add_child(player_box)
-	
+
+	# Fixed-width inner card: keeps the name/health bar from stretching across
+	# the whole top bar while still hugging the left edge.
+	var player_inner := VBoxContainer.new()
+	player_inner.custom_minimum_size = Vector2(620, 0)
+	player_inner.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+	player_inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	player_inner.add_theme_constant_override("separation", 6)
+	player_box.add_child(player_inner)
+
 	var p_header := HBoxContainer.new()
 	p_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	player_box.add_child(p_header)
-	
+	player_inner.add_child(p_header)
+
 	var p_name_lbl := Label.new()
 	var char_data = GameState.get_character_data(GameState.selected_character)
 	p_name_lbl.text = "YOU: " + char_data.get("name", "BLADE MASTER")
-	p_name_lbl.add_theme_font_size_override("font_size", 18)
+	p_name_lbl.add_theme_font_size_override("font_size", 26)
 	p_name_lbl.add_theme_color_override("font_color", Color(0.0, 0.9, 1.0))
 	p_header.add_child(p_name_lbl)
-	
+
 	var p_spacer := Control.new()
 	p_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	p_header.add_child(p_spacer)
-	
+
 	player_hp_lbl = Label.new()
 	player_hp_lbl.text = "100 / 100"
-	player_hp_lbl.add_theme_font_size_override("font_size", 16)
+	player_hp_lbl.add_theme_font_size_override("font_size", 22)
 	player_hp_lbl.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 	p_header.add_child(player_hp_lbl)
-	
+
 	player_hp_bar = ProgressBar.new()
-	player_hp_bar.custom_minimum_size = Vector2(0, 26)
+	player_hp_bar.custom_minimum_size = Vector2(0, 40)
 	player_hp_bar.min_value = 0
 	player_hp_bar.max_value = 100
 	player_hp_bar.value = 100
 	player_hp_bar.show_percentage = false
-	
+
 	var p_bg := StyleBoxFlat.new()
 	p_bg.bg_color = Color(0.06, 0.08, 0.12, 0.9)
 	p_bg.border_color = Color(0.2, 0.4, 0.6, 0.7)
-	p_bg.set_border_width_all(2)
-	p_bg.set_corner_radius_all(6)
-	
+	p_bg.set_border_width_all(3)
+	p_bg.set_corner_radius_all(9)
+
 	var p_fill := StyleBoxFlat.new()
 	p_fill.bg_color = Color(0.0, 0.85, 1.0)
-	p_fill.set_corner_radius_all(4)
-	
+	p_fill.set_corner_radius_all(6)
+
 	player_hp_bar.add_theme_stylebox_override("background", p_bg)
 	player_hp_bar.add_theme_stylebox_override("fill", p_fill)
-	player_box.add_child(player_hp_bar)
-	
+	player_inner.add_child(player_hp_bar)
+
 	# --- CENTER ROUND & TIMER PANEL ---
 	var center_panel := VBoxContainer.new()
-	center_panel.custom_minimum_size = Vector2(220, 75)
+	center_panel.custom_minimum_size = Vector2(260, 108)
 	center_panel.alignment = BoxContainer.ALIGNMENT_CENTER
 	center_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	center_panel.add_theme_constant_override("separation", 2)
+	center_panel.add_theme_constant_override("separation", 4)
 	top_bar.add_child(center_panel)
-	
+
 	round_lbl = Label.new()
 	round_lbl.text = "ROUND 1"
 	round_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	round_lbl.add_theme_font_size_override("font_size", 16)
+	round_lbl.add_theme_font_size_override("font_size", 22)
 	round_lbl.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 	center_panel.add_child(round_lbl)
-	
+
 	timer_lbl = Label.new()
 	timer_lbl.text = "60"
 	timer_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	timer_lbl.add_theme_font_size_override("font_size", 34)
+	timer_lbl.add_theme_font_size_override("font_size", 50)
 	timer_lbl.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	center_panel.add_child(timer_lbl)
-	
+
 	round_dots_lbl = Label.new()
 	round_dots_lbl.text = "○ ○   VS   ○ ○"
 	round_dots_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	round_dots_lbl.add_theme_font_size_override("font_size", 14)
+	round_dots_lbl.add_theme_font_size_override("font_size", 20)
 	round_dots_lbl.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0))
 	center_panel.add_child(round_dots_lbl)
-	
+
 	# --- ENEMY CARD (Right) ---
 	var enemy_box := VBoxContainer.new()
 	enemy_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	enemy_box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	enemy_box.add_theme_constant_override("separation", 4)
 	top_bar.add_child(enemy_box)
-	
+
+	var enemy_inner := VBoxContainer.new()
+	enemy_inner.custom_minimum_size = Vector2(620, 0)
+	enemy_inner.size_flags_horizontal = Control.SIZE_SHRINK_END
+	enemy_inner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	enemy_inner.add_theme_constant_override("separation", 6)
+	enemy_box.add_child(enemy_inner)
+
 	var e_header := HBoxContainer.new()
 	e_header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	enemy_box.add_child(e_header)
-	
+	enemy_inner.add_child(e_header)
+
 	enemy_hp_lbl = Label.new()
 	enemy_hp_lbl.text = "100 / 100"
-	enemy_hp_lbl.add_theme_font_size_override("font_size", 16)
+	enemy_hp_lbl.add_theme_font_size_override("font_size", 22)
 	enemy_hp_lbl.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9))
 	e_header.add_child(enemy_hp_lbl)
-	
+
 	var e_spacer := Control.new()
 	e_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	e_header.add_child(e_spacer)
-	
+
 	var e_name_lbl := Label.new()
 	var rival_id: String = "shadow_fighter" if GameState.selected_character == "blade_master" else "blade_master"
 	var rival_data = GameState.get_character_data(rival_id)
 	e_name_lbl.text = "RIVAL: " + rival_data.get("name", "SHADOW BRAWLER")
-	e_name_lbl.add_theme_font_size_override("font_size", 18)
+	e_name_lbl.add_theme_font_size_override("font_size", 26)
 	e_name_lbl.add_theme_color_override("font_color", Color(1.0, 0.4, 0.3))
 	e_header.add_child(e_name_lbl)
-	
+
 	enemy_hp_bar = ProgressBar.new()
-	enemy_hp_bar.custom_minimum_size = Vector2(0, 26)
+	enemy_hp_bar.custom_minimum_size = Vector2(0, 40)
 	enemy_hp_bar.min_value = 0
 	enemy_hp_bar.max_value = 100
 	enemy_hp_bar.value = 100
 	enemy_hp_bar.fill_mode = ProgressBar.FILL_END_TO_BEGIN
 	enemy_hp_bar.show_percentage = false
-	
+
 	var e_bg := StyleBoxFlat.new()
 	e_bg.bg_color = Color(0.06, 0.08, 0.12, 0.9)
 	e_bg.border_color = Color(0.6, 0.25, 0.25, 0.7)
-	e_bg.set_border_width_all(2)
-	e_bg.set_corner_radius_all(6)
-	
+	e_bg.set_border_width_all(3)
+	e_bg.set_corner_radius_all(9)
+
 	var e_fill := StyleBoxFlat.new()
 	e_fill.bg_color = Color(1.0, 0.35, 0.25)
-	e_fill.set_corner_radius_all(4)
-	
+	e_fill.set_corner_radius_all(6)
+
 	enemy_hp_bar.add_theme_stylebox_override("background", e_bg)
 	enemy_hp_bar.add_theme_stylebox_override("fill", e_fill)
-	enemy_box.add_child(enemy_hp_bar)
-	
+	enemy_inner.add_child(enemy_hp_bar)
+
 	# --- PAUSE BUTTON (Prominent & User-Friendly) ---
 	pause_btn = Button.new()
-	pause_btn.text = "❚❚ PAUSE"
-	pause_btn.custom_minimum_size = Vector2(140, 52)
+	# Plain ASCII text guarantees the label renders on every device font.
+	pause_btn.text = "PAUSE"
+	pause_btn.custom_minimum_size = Vector2(190, 72)
 	pause_btn.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	pause_btn.offset_left = -170
+	pause_btn.offset_left = -220
 	pause_btn.offset_right = -30
-	pause_btn.offset_top = 112
-	pause_btn.offset_bottom = 164
+	pause_btn.offset_top = 148
+	pause_btn.offset_bottom = 220
 	pause_btn.focus_mode = Control.FOCUS_NONE
-	
+
 	var p_btn_style := StyleBoxFlat.new()
 	p_btn_style.bg_color = Color(0.08, 0.12, 0.20, 0.88)
 	p_btn_style.border_color = Color(0.25, 0.7, 1.0, 0.8)
 	p_btn_style.set_border_width_all(2)
 	p_btn_style.set_corner_radius_all(8)
-	
+
 	var p_btn_hov := StyleBoxFlat.new()
 	p_btn_hov.bg_color = Color(0.16, 0.26, 0.44, 0.95)
 	p_btn_hov.border_color = Color(0.4, 0.9, 1.0, 1.0)
 	p_btn_hov.set_border_width_all(2)
 	p_btn_hov.set_corner_radius_all(8)
-	
+
 	pause_btn.add_theme_stylebox_override("normal", p_btn_style)
 	pause_btn.add_theme_stylebox_override("hover", p_btn_hov)
 	pause_btn.add_theme_stylebox_override("pressed", p_btn_hov)
-	pause_btn.add_theme_font_size_override("font_size", 20)
+	pause_btn.add_theme_font_size_override("font_size", 28)
 	pause_btn.pressed.connect(toggle_pause)
 	pause_btn.mouse_entered.connect(AudioManager.play_hover)
 	root.add_child(pause_btn)
@@ -407,12 +508,13 @@ func _on_enemy_health_changed(hp: float, max_hp: float) -> void:
 # ------------------------------------------------------------------------------
 # 4. BANNER & ANNOUNCEMENTS
 # ------------------------------------------------------------------------------
+
 func _create_banner_ui() -> void:
 	banner_canvas = CanvasLayer.new()
 	banner_canvas.layer = 25
 	banner_canvas.visible = false
 	add_child(banner_canvas)
-	
+
 	var box := VBoxContainer.new()
 	box.name = "BannerBox"
 	box.set_anchors_preset(Control.PRESET_CENTER)
@@ -425,7 +527,7 @@ func _create_banner_ui() -> void:
 	box.alignment = BoxContainer.ALIGNMENT_CENTER
 	box.pivot_offset = Vector2(400, 120)
 	banner_canvas.add_child(box)
-	
+
 	var title := Label.new()
 	title.name = "Title"
 	title.text = "ROUND 1"
@@ -435,7 +537,7 @@ func _create_banner_ui() -> void:
 	title.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.9))
 	title.add_theme_constant_override("shadow_offset_y", 6)
 	box.add_child(title)
-	
+
 	var subtitle := Label.new()
 	subtitle.name = "Subtitle"
 	subtitle.text = "FIGHT!"
@@ -453,15 +555,15 @@ func _show_round_end_announcement(title: String, subtitle: String, title_col: Co
 	t.text = title
 	t.add_theme_color_override("font_color", title_col)
 	s.text = subtitle
-	
+
 	banner_canvas.visible = true
 	box.scale = Vector2(0.6, 0.6)
 	box.modulate.a = 0.0
-	
+
 	var tw = create_tween().set_parallel(true)
 	tw.tween_property(box, "scale", Vector2(1.0, 1.0), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_property(box, "modulate:a", 1.0, 0.3)
-	
+
 	await get_tree().create_timer(1.4).timeout
 	var fade_tw = create_tween()
 	fade_tw.tween_property(box, "modulate:a", 0.0, 0.25)
@@ -475,11 +577,11 @@ func _show_match_end_banner(title: String, subtitle: String, title_col: Color, g
 	t.add_theme_color_override("font_color", title_col)
 	t.add_theme_color_override("font_shadow_color", glow_col)
 	s.text = subtitle
-	
+
 	banner_canvas.visible = true
 	box.scale = Vector2(0.5, 0.5)
 	box.modulate.a = 0.0
-	
+
 	var tw = create_tween().set_parallel(true)
 	tw.tween_property(box, "scale", Vector2(1.15, 1.15), 0.4).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	tw.tween_property(box, "modulate:a", 1.0, 0.4)
@@ -487,67 +589,53 @@ func _show_match_end_banner(title: String, subtitle: String, title_col: Color, g
 # ------------------------------------------------------------------------------
 # 5. PAUSE SYSTEM (EXACT CENTER, PROPER PAUSE, RESUME/RESTART/HOME)
 # ------------------------------------------------------------------------------
+
 func toggle_pause() -> void:
 	if match_ended:
 		return
-	is_game_paused = !is_game_paused
+	if get_tree().paused and not is_game_paused:
+		return
+	is_game_paused = not is_game_paused
 	get_tree().paused = is_game_paused
-	pause_canvas.visible = is_game_paused
-	pause_button.text = "▶" if is_game_paused else "❚❚"
-	if is_game_paused:
-		AudioManager.play_hover()
+	# Never leave a held touch, buffered tap or hit-stop behind when the game
+	# freezes, otherwise those inputs fire the moment combat resumes.
+	InputManager.reset_touch_state()
+	for node in get_tree().get_nodes_in_group("touch_joystick"):
+		if node.has_method("release_all"):
+			node.release_all()
+	for node in get_tree().get_nodes_in_group("touch_action_button"):
+		if node.has_method("release_all"):
+			node.release_all()
+	if pause_canvas:
+		pause_canvas.visible = is_game_paused
+	if pause_btn:
+		pause_btn.text = "RESUME" if is_game_paused else "PAUSE"
+	AudioManager.play_hover()
 
-func _create_hud_buttons():
-	var hud := CanvasLayer.new()
-	hud.layer = 15
-	add_child(hud)
-	
-	# Pause button at top-right
-	var pause_btn := Button.new()
-	pause_btn.text = "❚❚ MENU"
-	pause_btn.size = Vector2(130, 48)
-	pause_btn.position = Vector2(1920 - 160, 24)
-	pause_btn.focus_mode = Control.FOCUS_NONE
-	
-	var style_normal := StyleBoxFlat.new()
-	style_normal.bg_color = Color(0.08, 0.12, 0.20, 0.85)
-	style_normal.border_color = Color(0.25, 0.65, 1.0, 0.7)
-	style_normal.set_border_width_all(2)
-	style_normal.set_corner_radius_all(8)
-	
-	var style_hover := StyleBoxFlat.new()
-	style_hover.bg_color = Color(0.14, 0.22, 0.38, 0.95)
-	style_hover.border_color = Color(0.4, 0.8, 1.0, 0.95)
-	style_hover.set_border_width_all(2)
-	style_hover.set_corner_radius_all(8)
-	
-	pause_btn.add_theme_stylebox_override("normal", style_normal)
-	pause_btn.add_theme_stylebox_override("hover", style_hover)
-	pause_btn.add_theme_stylebox_override("pressed", style_hover)
-	pause_btn.add_theme_font_size_override("font_size", 20)
-	pause_btn.pressed.connect(toggle_pause)
-	pause_btn.mouse_entered.connect(AudioManager.play_hover)
-	hud.add_child(pause_btn)
-
-func _create_pause_ui():
+func _create_pause_ui() -> void:
 	pause_canvas = CanvasLayer.new()
 	pause_canvas.layer = 30
 	pause_canvas.visible = false
 	add_child(pause_canvas)
-	
+
 	# Dark semi-transparent background overlay
 	var backdrop := ColorRect.new()
 	backdrop.color = Color(0.02, 0.03, 0.06, 0.84)
 	backdrop.set_anchors_preset(Control.PRESET_FULL_RECT)
-	backdrop.size = Vector2(1920, 1080)
+	backdrop.mouse_filter = Control.MOUSE_FILTER_STOP
 	pause_canvas.add_child(backdrop)
-	
+
 	# Centered pause panel exactly in screen center
 	pause_panel = PanelContainer.new()
-	pause_panel.custom_minimum_size = Vector2(460, 480)
+	pause_panel.custom_minimum_size = Vector2(520, 540)
 	pause_panel.set_anchors_preset(Control.PRESET_CENTER)
-	pause_panel.position = Vector2(1920/2 - 230, 1080/2 - 240)
-	
+	pause_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	pause_panel.grow_vertical = Control.GROW_DIRECTION_BOTH
+	pause_panel.offset_left = -260
+	pause_panel.offset_right = 260
+	pause_panel.offset_top = -270
+	pause_panel.offset_bottom = 270
+
 	var panel_style := StyleBoxFlat.new()
 	panel_style.bg_color = Color(0.06, 0.08, 0.14, 0.96)
 	panel_style.border_color = Color(0.0, 0.85, 1.0, 0.85)
@@ -557,38 +645,38 @@ func _create_pause_ui():
 	panel_style.shadow_size = 28
 	pause_panel.add_theme_stylebox_override("panel", panel_style)
 	pause_canvas.add_child(pause_panel)
-	
+
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	vbox.add_theme_constant_override("separation", 20)
 	pause_panel.add_child(vbox)
-	
+
 	var title := Label.new()
 	title.text = "PAUSED"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 42)
+	title.add_theme_font_size_override("font_size", 48)
 	title.add_theme_color_override("font_color", Color(1.0, 1.0, 1.0))
 	title.add_theme_color_override("font_shadow_color", Color(0, 0.8, 1, 0.5))
 	title.add_theme_constant_override("shadow_offset_y", 2)
 	vbox.add_child(title)
-	
+
 	var sub := Label.new()
 	sub.text = "COMBAT SUSPENDED"
 	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	sub.add_theme_font_size_override("font_size", 14)
+	sub.add_theme_font_size_override("font_size", 16)
 	sub.add_theme_color_override("font_color", Color(0.0, 0.85, 1.0))
 	vbox.add_child(sub)
-	
+
 	# Resume Button
 	var resume_btn := _create_pause_menu_btn("▶  RESUME COMBAT", Color(0.0, 0.85, 1.0))
 	resume_btn.pressed.connect(toggle_pause)
 	vbox.add_child(resume_btn)
-	
+
 	# Restart Button
 	var restart_btn := _create_pause_menu_btn("↺  RESTART MATCH", Color(0.85, 0.85, 0.85))
 	restart_btn.pressed.connect(_on_restart_pressed)
 	vbox.add_child(restart_btn)
-	
+
 	# Home Button
 	var home_btn := _create_pause_menu_btn("⌂  RETURN TO HOME", Color(1.0, 0.45, 0.45))
 	home_btn.pressed.connect(_on_return_to_menu_pressed)
@@ -597,33 +685,39 @@ func _create_pause_ui():
 func _create_pause_menu_btn(btn_text: String, accent: Color) -> Button:
 	var btn := Button.new()
 	btn.text = btn_text
-	btn.custom_minimum_size = Vector2(360, 56)
-	btn.add_theme_font_size_override("font_size", 20)
-	
+	btn.custom_minimum_size = Vector2(420, 70)
+	btn.add_theme_font_size_override("font_size", 26)
+	btn.focus_mode = Control.FOCUS_NONE
+
 	var norm := StyleBoxFlat.new()
 	norm.bg_color = Color(0.10, 0.14, 0.22, 0.92)
 	norm.border_color = accent * 0.75
 	norm.set_border_width_all(2)
-	norm.set_corner_radius_all(10)
-	
+	norm.set_corner_radius_all(8)
+
 	var hov := StyleBoxFlat.new()
 	hov.bg_color = Color(0.16, 0.24, 0.38, 1.0)
 	hov.border_color = accent
 	hov.set_border_width_all(2)
 	hov.set_corner_radius_all(8)
-	
+
 	btn.add_theme_stylebox_override("normal", norm)
 	btn.add_theme_stylebox_override("hover", hov)
 	btn.add_theme_stylebox_override("pressed", hov)
 	btn.mouse_entered.connect(AudioManager.play_hover)
 	return btn
 
+func _reset_gameplay_state() -> void:
+	get_tree().paused = false
+	Engine.time_scale = 1.0
+	InputManager.reset_touch_state()
+
 func _on_restart_pressed() -> void:
 	AudioManager.play_click()
-	get_tree().paused = false
+	_reset_gameplay_state()
 	get_tree().reload_current_scene()
 
 func _on_return_to_menu_pressed() -> void:
 	AudioManager.play_click()
-	get_tree().paused = false
+	_reset_gameplay_state()
 	get_tree().change_scene_to_file("res://menu.tscn")

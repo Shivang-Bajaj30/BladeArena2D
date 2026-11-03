@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://c83k1mtestrunner"]
+[gd_scene format=3 uid="uid://pbidkm82nwrd"]
 
 [ext_resource type="Script" path="res://test_runner.gd" id="1_test"]
 

@@ -11,19 +11,29 @@ var resting_scale: Vector2
 var active_touches: Dictionary = {}
 
 func _ready() -> void:
+	add_to_group("touch_action_button")
 	resting_scale = scale
 	set_process_input(true)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			set_touch_inside(event.index, contains_screen_position(event.position))
+			if contains_screen_position(event.position):
+				if active_touches.has(event.index):
+					# Same index reported down twice means its release never
+					# reached us. Count it as a fresh tap instead of swallowing
+					# the next combo input.
+					press_action()
+				else:
+					set_touch_inside(event.index, true)
+			elif active_touches.has(event.index):
+				# This index is now down somewhere else; its old release was lost.
+				set_touch_inside(event.index, false)
 		else:
 			set_touch_inside(event.index, false)
-	elif event is InputEventScreenDrag:
-		# Checking every drag endpoint makes a fast swipe from one action button
-		# to another release the old action and press the new one in the same event.
-		set_touch_inside(event.index, contains_screen_position(event.position))
+	# ScreenDrag is deliberately ignored. Once a finger lands on a button it
+	# stays pressed until that finger lifts, so fast thumb movement during a
+	# combo can never make the button slip or auto-release.
 
 func contains_screen_position(screen_position: Vector2) -> bool:
 	if not texture_normal:
@@ -57,6 +67,14 @@ func release_action() -> void:
 	InputManager.release_button(action_name)
 	scale = resting_scale
 	modulate = Color.WHITE
+
+func release_all() -> void:
+	# Releases that occur while the game is paused are not delivered to _input(),
+	# so clear ownership and visuals whenever combat is suspended.
+	if active_touches.is_empty():
+		return
+	active_touches.clear()
+	release_action()
 
 func _exit_tree() -> void:
 	active_touches.clear()

@@ -103,14 +103,24 @@ func bind_fighters() -> void:
 	var players := get_tree().get_nodes_in_group("player_fighter")
 	if not players.is_empty():
 		var player = players[0]
-		player_label.text = GameState.get_character_data(GameState.selected_character)["name"]
-		player.health_changed.connect(_on_player_health_changed)
+		var char_data = GameState.get_character_data(GameState.selected_character)
+		player_label.text = char_data.get("name", "PLAYER")
+		if not player.health_changed.is_connected(_on_player_health_changed):
+			player.health_changed.connect(_on_player_health_changed)
 		_on_player_health_changed(player.health, player.max_health)
+
+	var opponents := get_tree().get_nodes_in_group("opponent_fighter")
+	if not opponents.is_empty():
+		var opp = opponents[0]
+		var rival_id: String = "shadow_fighter" if GameState.selected_character == "blade_master" else "blade_master"
+		var rival_data = GameState.get_character_data(rival_id)
+		bind_opponent(opp, rival_data.get("name", "SHADOW RIVAL"), 1, 3)
 
 func bind_opponent(opponent: Node, fighter_name: String, round_number: int, total_rounds: int) -> void:
 	opponent_label.text = fighter_name
 	round_label.text = "ROUND %d / %d" % [round_number, total_rounds]
-	opponent.health_changed.connect(_on_opponent_health_changed)
+	if not opponent.health_changed.is_connected(_on_opponent_health_changed):
+		opponent.health_changed.connect(_on_opponent_health_changed)
 	_on_opponent_health_changed(opponent.health, opponent.max_health)
 
 func _on_player_health_changed(current: float, maximum: float) -> void:
